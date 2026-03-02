@@ -5,19 +5,45 @@
     <title>Food Calorie Estimation - ML Project</title>
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+
+            /* Background Image */
+            background: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061') no-repeat center center fixed;
+            background-size: cover;
         }
 
         .container {
-            margin-top: 50px;
-            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            display: inline-block;
+            border-radius: 15px;
+            box-shadow: 0 0 15px black;
         }
 
         input, button {
             padding: 10px;
             margin: 10px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid gray;
+        }
+
+        button {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #e64a19;
         }
 
         #homePage {
@@ -27,14 +53,11 @@
         img {
             margin-top: 20px;
             width: 300px;
+            border-radius: 10px;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            display: inline-block;
-            border-radius: 10px;
-            box-shadow: 0 0 10px gray;
+        h2 {
+            color: #333;
         }
     </style>
 </head>
@@ -73,7 +96,7 @@
     const correctPassword = "1234";
 
     function login(event) {
-        event.preventDefault(); // Prevent page refresh
+        event.preventDefault();
 
         let user = document.getElementById("username").value.trim();
         let pass = document.getElementById("password").value.trim();
@@ -106,8 +129,6 @@
         }
 
         let fileSize = file.size;
-
-        // Simulated ML Linear Formula
         let calories = (fileSize / 1000).toFixed(2);
 
         let reader = new FileReader();
