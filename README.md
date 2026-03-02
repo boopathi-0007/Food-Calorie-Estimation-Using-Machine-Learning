@@ -1,97 +1,104 @@
 # Food-Calorie-Estimation-Using-Machine-Learning
-from flask import Flask, request, redirect, url_for, render_template_string
-import numpy as np
-from sklearn.linear_model import LinearRegression
-import os
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Calorie Estimation - ML Project</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+        }
 
-# Create uploads folder automatically
-if not os.path.exists('uploads'):
-    os.makedirs('uploads')
+        input, button {
+            padding: 10px;
+            margin: 10px;
+        }
 
-# ------------------------
-# Create Simple ML Model
-# ------------------------
-X = np.array([[1000], [2000], [3000], [4000], [5000]])
-y = np.array([150, 250, 350, 450, 550])
+        #homePage {
+            display: none;
+        }
 
-model = LinearRegression()
-model.fit(X, y)
+        img {
+            margin-top: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
 
-# ------------------------
-# Simple Login Credentials
-# ------------------------
-USERNAME = "admin"
-PASSWORD = "1234"
+<div class="container">
 
-# ------------------------
-# Login Page
-# ------------------------
-@app.route('/')
-def login():
-    return render_template_string('''
+    <!-- LOGIN PAGE -->
+    <div id="loginPage">
         <h2>Food Calorie Estimation - Login</h2>
-        <form method="POST" action="/login">
-            <input type="text" name="username" placeholder="Username" required><br><br>
-            <input type="password" name="password" placeholder="Password" required><br><br>
-            <button type="submit">Login</button>
-        </form>
-    ''')
+        <input type="text" id="username" placeholder="Username"><br>
+        <input type="password" id="password" placeholder="Password"><br>
+        <button onclick="login()">Login</button>
+        <p id="loginError" style="color:red;"></p>
+    </div>
 
-@app.route('/login', methods=['POST'])
-def login_check():
-    username = request.form['username']
-    password = request.form['password']
-
-    if username == USERNAME and password == PASSWORD:
-        return redirect('/home')
-    else:
-        return "<h3>Invalid Login</h3><a href='/'>Try Again</a>"
-
-# ------------------------
-# Home Page - Upload Image
-# ------------------------
-@app.route('/home')
-def home():
-    return render_template_string('''
+    <!-- HOME PAGE -->
+    <div id="homePage">
         <h2>Upload Food Image</h2>
-        <form method="POST" action="/predict" enctype="multipart/form-data">
-            <input type="file" name="image" required><br><br>
-            <button type="submit">Estimate Calories</button>
-        </form>
-    ''')
+        <input type="file" id="foodImage" accept="image/*"><br>
+        <button onclick="estimateCalories()">Estimate Calories</button>
 
-# ------------------------
-# Prediction
-# ------------------------
-@app.route('/predict', methods=['POST'])
-def predict():
-    file = request.files['image']
+        <div id="result"></div>
+    </div>
 
-    if file:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(filepath)
+</div>
 
-        # Use file size as dummy ML input
-        size = os.path.getsize(filepath)
-        size = np.array([[size]])
+<script>
+    // Simple login credentials
+    const correctUsername = "admin";
+    const correctPassword = "1234";
 
-        prediction = model.predict(size)
-        calories = round(prediction[0], 2)
+    function login() {
+        let user = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
 
-        return render_template_string(f'''
-            <h2>Calorie Estimation Result</h2>
-            <img src="/{filepath}" width="300"><br><br>
-            <h3>Estimated Calories: {calories} kcal</h3>
-            <a href="/home">Try Another</a>
-        ''')
+        if (user === correctUsername && pass === correctPassword) {
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("homePage").style.display = "block";
+        } else {
+            document.getElementById("loginError").innerText = "Invalid Username or Password";
+        }
+    }
 
-    return "No file uploaded"
+    function estimateCalories() {
+        let fileInput = document.getElementById("foodImage");
+        let resultDiv = document.getElementById("result");
 
-# ------------------------
-# Run App
-# ------------------------
-if __name__ == "__main__":
-    app.run(debug=True)
+        if (fileInput.files.length === 0) {
+            alert("Please upload an image");
+            return;
+        }
+
+        let file = fileInput.files[0];
+
+        // Dummy ML Logic (Using file size)
+        let fileSize = file.size;  
+
+        // Simple Linear Formula (Simulated ML Model)
+        let calories = (fileSize / 10).toFixed(2);
+
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            resultDiv.innerHTML = `
+                <h3>Estimated Calories: ${calories} kcal</h3>
+                <img src="${e.target.result}">
+            `;
+        }
+
+        reader.readAsDataURL(file);
+    }
+</script>
+
+</body>
+</html>
