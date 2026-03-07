@@ -19,7 +19,6 @@ justify-content:center;
 align-items:center;
 background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
-background-position:center;
 }
 
 .loginBox{
@@ -42,7 +41,6 @@ background:green;
 color:white;
 border:none;
 cursor:pointer;
-border-radius:5px;
 }
 
 /* MAIN PAGE */
@@ -51,16 +49,6 @@ border-radius:5px;
 display:none;
 text-align:center;
 padding:30px;
-}
-
-.result{
-margin-top:20px;
-font-size:18px;
-}
-
-img{
-margin-top:20px;
-max-width:200px;
 }
 
 </style>
@@ -94,26 +82,20 @@ max-width:200px;
 
 <h1>AI Food Nutrition Analyzer</h1>
 
-<p>Upload Food Image</p>
+<p>Enter Food Name</p>
 
-<input type="file" id="image">
+<input type="text" id="foodName" placeholder="Example: pizza">
 
 <br><br>
 
-<button onclick="analyzeFood()">Analyze Food</button>
+<button onclick="analyze()">Analyze Food</button>
 
-<br>
-
-<img id="preview">
-
-<div class="result" id="output"></div>
+<h3 id="output"></h3>
 
 </div>
 
 
 <script>
-
-/* LOGIN (no validation so error varathu) */
 
 function login(){
 
@@ -122,8 +104,7 @@ document.getElementById("mainPage").style.display="block";
 
 }
 
-
-/* DATASET (25 foods) */
+/* FOOD DATASET */
 
 let foods={
 
@@ -155,54 +136,18 @@ sandwich:{cal:250,protein:12}
 
 };
 
+function analyze(){
 
-/* ANALYZE FOOD */
+let f=document.getElementById("foodName").value.toLowerCase();
 
-function analyzeFood(){
-
-let file=document.getElementById("image").files[0];
-
-if(!file)
-{
-alert("Upload image");
-return;
-}
-
-/* IMAGE PREVIEW */
-
-let reader=new FileReader();
-
-reader.onload=function(e)
-{
-document.getElementById("preview").src=e.target.result;
-}
-
-reader.readAsDataURL(file);
-
-
-/* DETECTION USING FILE NAME */
-
-let name=file.name.toLowerCase();
-
-let detected="unknown";
-
-for(let f in foods)
-{
-if(name.includes(f))
-{
-detected=f;
-break;
-}
-}
-
-if(detected=="unknown")
+if(!foods[f])
 {
 document.getElementById("output").innerHTML="Food not in dataset";
 return;
 }
 
-let cal=foods[detected].cal;
-let protein=foods[detected].protein;
+let cal=foods[f].cal;
+let protein=foods[f].protein;
 
 let category="";
 let suggestion="";
@@ -225,11 +170,11 @@ suggestion="Eat in moderation";
 
 document.getElementById("output").innerHTML=
 
-"<br><b>Food Detected :</b> "+detected+
-"<br><br><b>Calories :</b> "+cal+" kcal"+
-"<br><br><b>Protein :</b> "+protein+" g"+
-"<br><br><b>Category :</b> "+category+
-"<br><br><b>Suggestion :</b> "+suggestion;
+"Food : "+f+"<br><br>"+
+"Calories : "+cal+" kcal<br><br>"+
+"Protein : "+protein+" g<br><br>"+
+"Category : "+category+"<br><br>"+
+"Suggestion : "+suggestion;
 
 }
 
