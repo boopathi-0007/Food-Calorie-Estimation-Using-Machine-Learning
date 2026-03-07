@@ -11,8 +11,6 @@ font-family:Arial;
 margin:0;
 }
 
-/* LOGIN PAGE */
-
 #loginPage{
 height:100vh;
 display:flex;
@@ -20,7 +18,6 @@ justify-content:center;
 align-items:center;
 background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
-background-position:center;
 }
 
 .loginBox{
@@ -28,10 +25,7 @@ background:white;
 padding:30px;
 border-radius:10px;
 text-align:center;
-box-shadow:0 0 10px gray;
 }
-
-/* MAIN PAGE */
 
 #mainPage{
 display:none;
@@ -40,8 +34,8 @@ padding:30px;
 }
 
 img{
-width:250px;
-margin-top:15px;
+width:260px;
+margin-top:20px;
 border-radius:10px;
 }
 
@@ -55,7 +49,7 @@ cursor:pointer;
 
 input{
 padding:10px;
-width:230px;
+width:220px;
 }
 
 </style>
@@ -70,8 +64,8 @@ width:230px;
 
 <h2>Login</h2>
 
-<input type="text" placeholder="Username"><br><br>
-<input type="password" placeholder="Password"><br><br>
+<input type="text"><br><br>
+<input type="password"><br><br>
 
 <button onclick="login()">Login</button>
 
@@ -83,13 +77,11 @@ width:230px;
 
 <h1>Indian Food Nutrition Analyzer</h1>
 
-<p>Enter Food Name</p>
-
 <input type="text" id="foodName" placeholder="Example: dosa">
 
 <br><br>
 
-<button onclick="analyze()">Analyze Food</button>
+<button onclick="analyze()">Analyze</button>
 
 <div id="result"></div>
 
@@ -114,7 +106,6 @@ rasam:{cal:60,protein:2},
 curd_rice:{cal:180,protein:6},
 lemon_rice:{cal:200,protein:4},
 tamarind_rice:{cal:210,protein:4},
-coconut_rice:{cal:220,protein:4},
 veg_biryani:{cal:250,protein:7},
 chicken_biryani:{cal:290,protein:15},
 mutton_biryani:{cal:320,protein:18},
@@ -140,11 +131,7 @@ thepla:{cal:200,protein:5},
 khichdi:{cal:180,protein:6},
 poha:{cal:180,protein:4},
 jalebi:{cal:300,protein:2},
-gulab_jamun:{cal:350,protein:4},
-rasgulla:{cal:186,protein:4},
-kheer:{cal:220,protein:6},
-laddu:{cal:250,protein:5},
-halwa:{cal:300,protein:5}
+gulab_jamun:{cal:350,protein:4}
 
 };
 
@@ -152,8 +139,7 @@ function analyze(){
 
 let f=document.getElementById("foodName").value.toLowerCase();
 
-if(!foods[f])
-{
+if(!foods[f]){
 document.getElementById("result").innerHTML="Food not in dataset";
 return;
 }
@@ -163,39 +149,37 @@ let protein=foods[f].protein;
 
 let category="";
 let suggestion="";
-let healthTip="";
+let tip="";
 
 if(cal<150){
 category="Healthy Food";
 suggestion="Good for diet";
-healthTip="Eat regularly with vegetables";
+tip="Eat with vegetables";
 }
 else if(cal<280){
 category="Moderate Food";
-suggestion="Eat in balanced diet";
-healthTip="Drink more water and maintain balanced diet";
+suggestion="Eat balanced diet";
+tip="Drink more water";
 }
 else{
 category="High Calorie Food";
 suggestion="Eat occasionally";
-healthTip="Do exercise to burn calories";
+tip="Do exercise regularly";
 }
 
-/* INTERNET IMAGE */
+/* IMAGE LINK */
 
-let imageURL="https://source.unsplash.com/400x300/?"+f;
-
-/* OUTPUT */
+let img="https://source.unsplash.com/400x300/?indian,"+f;
 
 document.getElementById("result").innerHTML=
 
 "<h2>"+f+"</h2>"+
-"<img src='"+imageURL+"'>"+
-"<p><b>Calories :</b> "+cal+" kcal</p>"+
-"<p><b>Protein :</b> "+protein+" g</p>"+
-"<p><b>Category :</b> "+category+"</p>"+
-"<p><b>Suggestion :</b> "+suggestion+"</p>"+
-"<p><b>Health Tip :</b> "+healthTip+"</p>";
+"<img src='"+img+"'>"+
+"<p>Calories : "+cal+" kcal</p>"+
+"<p>Protein : "+protein+" g</p>"+
+"<p>Category : "+category+"</p>"+
+"<p>Suggestion : "+suggestion+"</p>"+
+"<p>Health Tip : "+tip+"</p>";
 
 }
 
