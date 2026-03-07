@@ -8,8 +8,7 @@
 body{
 margin:0;
 font-family:Arial;
-background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") no-repeat center center fixed;
-background-size:cover;
+background:#f2f2f2;
 text-align:center;
 }
 
@@ -18,40 +17,27 @@ margin-top:80px;
 }
 
 .card{
-background:rgba(255,255,255,0.9);
+background:white;
 padding:30px;
-border-radius:12px;
+border-radius:10px;
 display:inline-block;
-box-shadow:0 0 15px black;
+box-shadow:0 0 10px gray;
 }
 
 input,select,button{
 padding:10px;
 margin:10px;
 width:220px;
-border-radius:5px;
-border:1px solid gray;
 }
 
 button{
 background:#ff5722;
 color:white;
 border:none;
-cursor:pointer;
-}
-
-button:hover{
-background:#e64a19;
 }
 
 #homePage{
 display:none;
-}
-
-img{
-width:220px;
-margin-top:20px;
-border-radius:10px;
 }
 
 </style>
@@ -61,14 +47,11 @@ border-radius:10px;
 
 <div class="container">
 
-<!-- LOGIN PAGE -->
-
 <div id="loginPage" class="card">
 
 <h2>Food Calorie Estimation Login</h2>
 
 <input type="text" id="username" placeholder="Username"><br>
-
 <input type="password" id="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
@@ -76,9 +59,6 @@ border-radius:10px;
 <p id="error" style="color:red;"></p>
 
 </div>
-
-
-<!-- HOME PAGE -->
 
 <div id="homePage" class="card">
 
@@ -123,10 +103,6 @@ border-radius:10px;
 
 <button onclick="logout()">Logout</button>
 
-<br>
-
-<img id="preview">
-
 <div id="result"></div>
 
 </div>
@@ -134,8 +110,6 @@ border-radius:10px;
 </div>
 
 <script>
-
-/* LOGIN */
 
 function login(){
 
@@ -156,8 +130,6 @@ document.getElementById("error").innerText="Invalid Login";
 }
 
 
-
-/* 25 DATASET */
 
 const foodData={
 
@@ -191,65 +163,17 @@ Cheese:{cal:402,protein:25}
 
 
 
-/* IMAGE UPLOAD + LOW MEMORY FIX */
-
 function predict(){
 
-let file=document.getElementById("imageUpload").files[0];
 let food=document.getElementById("foodSelect").value;
 
-if(!file || !food){
-alert("Upload image and select food");
+if(!food){
+
+alert("Select food");
+
 return;
-}
-
-/* FILE SIZE LIMIT */
-
-if(file.size > 3 * 1024 * 1024){
-alert("Image too large. Upload image below 3MB");
-return;
-}
-
-let img=new Image();
-let reader=new FileReader();
-
-reader.onload=function(e){
-
-img.src=e.target.result;
-
-img.onload=function(){
-
-let canvas=document.createElement("canvas");
-let ctx=canvas.getContext("2d");
-
-let maxWidth=250;
-
-let scale=Math.min(maxWidth/img.width,1);
-
-canvas.width=img.width*scale;
-canvas.height=img.height*scale;
-
-ctx.drawImage(img,0,0,canvas.width,canvas.height);
-
-let compressed=canvas.toDataURL("image/jpeg",0.5);
-
-document.getElementById("preview").src=compressed;
-
-showResult(food);
-
-};
-
-};
-
-reader.readAsDataURL(file);
 
 }
-
-
-
-/* SHOW RESULT */
-
-function showResult(food){
 
 let cal=foodData[food].cal;
 let protein=foodData[food].protein;
@@ -269,13 +193,11 @@ document.getElementById("result").innerHTML=
 "<h3>Food: "+food+"</h3>"+
 "<h3>Calories: "+cal+" kcal</h3>"+
 "<h3>Protein: "+protein+" g</h3>"+
-"<h3>Health Suggestion: "+suggestion+"</h3>";
+"<h3>Suggestion: "+suggestion+"</h3>";
 
 }
 
 
-
-/* LOGOUT */
 
 function logout(){
 
