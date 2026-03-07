@@ -19,6 +19,7 @@ justify-content:center;
 align-items:center;
 background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
+background-position:center;
 }
 
 .loginBox{
@@ -32,7 +33,7 @@ box-shadow:0 0 10px gray;
 input{
 padding:10px;
 margin:10px;
-width:200px;
+width:220px;
 }
 
 button{
@@ -41,6 +42,7 @@ background:green;
 color:white;
 border:none;
 cursor:pointer;
+border-radius:5px;
 }
 
 /* MAIN PAGE */
@@ -54,6 +56,11 @@ padding:30px;
 .result{
 margin-top:20px;
 font-size:18px;
+}
+
+img{
+margin-top:20px;
+max-width:200px;
 }
 
 </style>
@@ -70,9 +77,9 @@ font-size:18px;
 
 <h2>Login</h2>
 
-<input type="text" id="user" placeholder="Username"><br>
+<input type="text" placeholder="Username"><br>
 
-<input type="password" id="pass" placeholder="Password"><br>
+<input type="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
@@ -93,7 +100,11 @@ font-size:18px;
 
 <br><br>
 
-<button onclick="analyzeFood()">Analyze</button>
+<button onclick="analyzeFood()">Analyze Food</button>
+
+<br>
+
+<img id="preview">
 
 <div class="result" id="output"></div>
 
@@ -102,27 +113,17 @@ font-size:18px;
 
 <script>
 
-/* LOGIN */
+/* LOGIN (no validation so error varathu) */
 
 function login(){
 
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
-
-if(u=="admin" && p=="1234")
-{
 document.getElementById("loginPage").style.display="none";
 document.getElementById("mainPage").style.display="block";
-}
-else
-{
-alert("Invalid Login");
-}
 
 }
 
 
-/* DATASET */
+/* DATASET (25 foods) */
 
 let foods={
 
@@ -155,7 +156,7 @@ sandwich:{cal:250,protein:12}
 };
 
 
-/* FOOD ANALYSIS */
+/* ANALYZE FOOD */
 
 function analyzeFood(){
 
@@ -163,9 +164,23 @@ let file=document.getElementById("image").files[0];
 
 if(!file)
 {
-alert("Please upload image");
+alert("Upload image");
 return;
 }
+
+/* IMAGE PREVIEW */
+
+let reader=new FileReader();
+
+reader.onload=function(e)
+{
+document.getElementById("preview").src=e.target.result;
+}
+
+reader.readAsDataURL(file);
+
+
+/* DETECTION USING FILE NAME */
 
 let name=file.name.toLowerCase();
 
@@ -210,11 +225,11 @@ suggestion="Eat in moderation";
 
 document.getElementById("output").innerHTML=
 
-"<b>Food Detected :</b> "+detected+"<br><br>"+
-"<b>Calories :</b> "+cal+" kcal<br><br>"+
-"<b>Protein :</b> "+protein+" g<br><br>"+
-"<b>Category :</b> "+category+"<br><br>"+
-"<b>Suggestion :</b> "+suggestion;
+"<br><b>Food Detected :</b> "+detected+
+"<br><br><b>Calories :</b> "+cal+" kcal"+
+"<br><br><b>Protein :</b> "+protein+" g"+
+"<br><br><b>Category :</b> "+category+
+"<br><br><b>Suggestion :</b> "+suggestion;
 
 }
 
