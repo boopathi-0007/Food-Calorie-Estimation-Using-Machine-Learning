@@ -49,7 +49,7 @@ display:none;
 }
 
 img{
-width:260px;
+width:220px;
 margin-top:20px;
 border-radius:10px;
 }
@@ -191,7 +191,7 @@ Cheese:{cal:402,protein:25}
 
 
 
-/* IMAGE UPLOAD + MEMORY FIX */
+/* IMAGE UPLOAD + LOW MEMORY FIX */
 
 function predict(){
 
@@ -199,11 +199,15 @@ let file=document.getElementById("imageUpload").files[0];
 let food=document.getElementById("foodSelect").value;
 
 if(!file || !food){
-
 alert("Upload image and select food");
-
 return;
+}
 
+/* FILE SIZE LIMIT */
+
+if(file.size > 3 * 1024 * 1024){
+alert("Image too large. Upload image below 3MB");
+return;
 }
 
 let img=new Image();
@@ -218,15 +222,16 @@ img.onload=function(){
 let canvas=document.createElement("canvas");
 let ctx=canvas.getContext("2d");
 
-let maxWidth=400;
-let scale=maxWidth/img.width;
+let maxWidth=250;
 
-canvas.width=maxWidth;
+let scale=Math.min(maxWidth/img.width,1);
+
+canvas.width=img.width*scale;
 canvas.height=img.height*scale;
 
 ctx.drawImage(img,0,0,canvas.width,canvas.height);
 
-let compressed=canvas.toDataURL("image/jpeg",0.7);
+let compressed=canvas.toDataURL("image/jpeg",0.5);
 
 document.getElementById("preview").src=compressed;
 
@@ -252,17 +257,11 @@ let protein=foodData[food].protein;
 let suggestion="";
 
 if(cal<100){
-
 suggestion="Low calorie food";
-
 }else if(cal<200){
-
 suggestion="Moderate calories";
-
 }else{
-
 suggestion="High calories";
-
 }
 
 document.getElementById("result").innerHTML=
