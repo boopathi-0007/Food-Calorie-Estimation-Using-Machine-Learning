@@ -133,7 +133,6 @@ border-radius:10px;
 
 </div>
 
-
 <script>
 
 /* LOGIN */
@@ -155,6 +154,7 @@ document.getElementById("error").innerText="Invalid Login";
 }
 
 }
+
 
 
 /* 25 DATASET */
@@ -191,6 +191,8 @@ Cheese:{cal:402,protein:25}
 
 
 
+/* IMAGE UPLOAD + MEMORY FIX */
+
 function predict(){
 
 let file=document.getElementById("imageUpload").files[0];
@@ -204,9 +206,45 @@ return;
 
 }
 
-let img=document.getElementById("preview");
+let img=new Image();
+let reader=new FileReader();
 
-img.src=URL.createObjectURL(file);
+reader.onload=function(e){
+
+img.src=e.target.result;
+
+img.onload=function(){
+
+let canvas=document.createElement("canvas");
+let ctx=canvas.getContext("2d");
+
+let maxWidth=400;
+let scale=maxWidth/img.width;
+
+canvas.width=maxWidth;
+canvas.height=img.height*scale;
+
+ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+let compressed=canvas.toDataURL("image/jpeg",0.7);
+
+document.getElementById("preview").src=compressed;
+
+showResult(food);
+
+};
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+
+
+/* SHOW RESULT */
+
+function showResult(food){
 
 let cal=foodData[food].cal;
 let protein=foodData[food].protein;
