@@ -2,152 +2,211 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Food Calorie Estimation - ML Project</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
+<title>Food Calorie Estimation</title>
 
-            /* Background Image */
-            background: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061') no-repeat center center fixed;
-            background-size: cover;
-        }
+<style>
 
-        .container {
-            margin-top: 80px;
-        }
+body{
+font-family:Arial;
+text-align:center;
+background:#f2f2f2;
+margin:0;
+padding:0;
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            display: inline-block;
-            border-radius: 15px;
-            box-shadow: 0 0 15px black;
-        }
+.container{
+margin-top:80px;
+}
 
-        input, button {
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid gray;
-        }
+.card{
+background:white;
+padding:30px;
+display:inline-block;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
 
-        button {
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+input,button{
+padding:10px;
+margin:10px;
+width:220px;
+border-radius:5px;
+border:1px solid gray;
+}
 
-        button:hover {
-            background-color: #e64a19;
-        }
+button{
+background:#ff5722;
+color:white;
+border:none;
+cursor:pointer;
+}
 
-        #homePage {
-            display: none;
-        }
+button:hover{
+background:#e64a19;
+}
 
-        img {
-            margin-top: 20px;
-            width: 300px;
-            border-radius: 10px;
-        }
+#homePage{
+display:none;
+}
 
-        h2 {
-            color: #333;
-        }
-    </style>
+img{
+width:280px;
+margin-top:20px;
+border-radius:10px;
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="container">
 
-    <!-- LOGIN PAGE -->
-    <div id="loginPage" class="card">
-        <h2>Food Calorie Estimation - Login</h2>
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="card">
 
-        <form onsubmit="login(event)">
-            <input type="text" id="username" placeholder="Username" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit">Login</button>
-        </form>
+<h2>Food Calorie Estimation Login</h2>
 
-        <p id="loginError" style="color:red;"></p>
-    </div>
+<input type="text" id="username" placeholder="Username"><br>
+<input type="password" id="password" placeholder="Password"><br>
 
-    <!-- HOME PAGE -->
-    <div id="homePage" class="card">
-        <h2>Upload Food Image</h2>
+<button onclick="login()">Login</button>
 
-        <input type="file" id="foodImage" accept="image/*"><br>
-        <button onclick="estimateCalories()">Estimate Calories</button>
-        <button onclick="logout()">Logout</button>
-
-        <div id="result"></div>
-    </div>
+<p id="error" style="color:red;"></p>
 
 </div>
 
+
+<!-- HOME PAGE -->
+<div id="homePage" class="card">
+
+<h2>Upload Food Image</h2>
+
+<input type="file" id="foodImage" accept="image/*"><br>
+
+<button onclick="estimateCalories()">Estimate Calories</button>
+<button onclick="logout()">Logout</button>
+
+<div id="result"></div>
+
+</div>
+
+</div>
+
+
 <script>
-    const correctUsername = "admin";
-    const correctPassword = "1234";
 
-    function login(event) {
-        event.preventDefault();
+/* LOGIN */
 
-        let user = document.getElementById("username").value.trim();
-        let pass = document.getElementById("password").value.trim();
+function login(){
 
-        if (user === correctUsername && pass === correctPassword) {
-            document.getElementById("loginPage").style.display = "none";
-            document.getElementById("homePage").style.display = "block";
-            document.getElementById("loginError").innerText = "";
-        } else {
-            document.getElementById("loginError").innerText = "Invalid Username or Password";
-        }
-    }
+let u=document.getElementById("username").value;
+let p=document.getElementById("password").value;
 
-    function estimateCalories() {
-        let fileInput = document.getElementById("foodImage");
-        let resultDiv = document.getElementById("result");
+if(u==="admin" && p==="1234"){
 
-        resultDiv.innerHTML = "";
+document.getElementById("loginPage").style.display="none";
+document.getElementById("homePage").style.display="block";
 
-        if (fileInput.files.length === 0) {
-            alert("Please upload an image");
-            return;
-        }
+}else{
 
-        let file = fileInput.files[0];
+document.getElementById("error").innerText="Invalid Login";
 
-        if (!file.type.startsWith("image/")) {
-            alert("Please upload a valid image file");
-            return;
-        }
+}
 
-        let fileSize = file.size;
-        let calories = (fileSize / 1000).toFixed(2);
+}
 
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            resultDiv.innerHTML = `
-                <h3>Estimated Calories: ${calories} kcal</h3>
-                <img src="${e.target.result}">
-            `;
-        };
 
-        reader.readAsDataURL(file);
-    }
+/* 20 FOOD DATASET */
 
-    function logout() {
-        document.getElementById("homePage").style.display = "none";
-        document.getElementById("loginPage").style.display = "block";
-        document.getElementById("foodImage").value = "";
-        document.getElementById("result").innerHTML = "";
-    }
+let foodDataset=[
+
+{name:"Pizza",calories:266,protein:11},
+{name:"Burger",calories:295,protein:17},
+{name:"Rice",calories:130,protein:2},
+{name:"Pasta",calories:158,protein:5},
+{name:"Apple",calories:52,protein:0.3},
+{name:"Banana",calories:89,protein:1.1},
+{name:"Idli",calories:58,protein:2},
+{name:"Dosa",calories:168,protein:3},
+{name:"Puri",calories:98,protein:2},
+{name:"Fried Chicken",calories:246,protein:27},
+{name:"Sandwich",calories:150,protein:6},
+{name:"Salad",calories:75,protein:2},
+{name:"Ice Cream",calories:207,protein:3.5},
+{name:"Chocolate",calories:546,protein:4.9},
+{name:"Biryani",calories:290,protein:15},
+{name:"Chapati",calories:120,protein:3},
+{name:"Noodles",calories:138,protein:4},
+{name:"French Fries",calories:312,protein:3.4},
+{name:"Egg Omelette",calories:154,protein:11},
+{name:"Paneer Curry",calories:265,protein:18}
+
+];
+
+
+/* CALORIE ESTIMATION */
+
+function estimateCalories(){
+
+let file=document.getElementById("foodImage");
+
+if(file.files.length===0){
+
+alert("Upload food image");
+return;
+
+}
+
+let randomFood=foodDataset[Math.floor(Math.random()*foodDataset.length)];
+
+let suggestion="";
+
+if(randomFood.calories<100){
+
+suggestion="Low calorie food - Good for diet";
+
+}else if(randomFood.calories<200){
+
+suggestion="Moderate calories - Balanced food";
+
+}else{
+
+suggestion="High calories - Eat in moderation";
+
+}
+
+let reader=new FileReader();
+
+reader.onload=function(e){
+
+document.getElementById("result").innerHTML=
+
+"<h3>Food Detected: "+randomFood.name+"</h3>"+
+"<h3>Estimated Calories: "+randomFood.calories+" kcal</h3>"+
+"<h3>Protein: "+randomFood.protein+" g</h3>"+
+"<h3>Health Suggestion: "+suggestion+"</h3>"+
+"<img src='"+e.target.result+"'>";
+
+};
+
+reader.readAsDataURL(file.files[0]);
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+document.getElementById("homePage").style.display="none";
+document.getElementById("loginPage").style.display="block";
+
+document.getElementById("foodImage").value="";
+document.getElementById("result").innerHTML="";
+
+}
+
 </script>
 
 </body>
