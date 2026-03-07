@@ -6,9 +6,8 @@
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial;
 margin:0;
-padding:0;
 }
 
 /* LOGIN PAGE */
@@ -20,7 +19,6 @@ justify-content:center;
 align-items:center;
 background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
-background-position:center;
 }
 
 .loginBox{
@@ -28,7 +26,7 @@ background:white;
 padding:30px;
 border-radius:10px;
 text-align:center;
-box-shadow:0 0 10px rgba(0,0,0,0.3);
+box-shadow:0 0 10px gray;
 }
 
 input{
@@ -59,6 +57,7 @@ font-size:18px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -71,15 +70,16 @@ font-size:18px;
 
 <h2>Login</h2>
 
-<input type="text" id="username" placeholder="Username"><br>
+<input type="text" id="user" placeholder="Username"><br>
 
-<input type="password" id="password" placeholder="Password"><br>
+<input type="password" id="pass" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
 </div>
 
 </div>
+
 
 <!-- MAIN PAGE -->
 
@@ -89,26 +89,27 @@ font-size:18px;
 
 <p>Upload Food Image</p>
 
-<input type="file" id="foodImage">
+<input type="file" id="image">
 
 <br><br>
 
-<button onclick="detectFood()">Analyze Food</button>
+<button onclick="analyzeFood()">Analyze</button>
 
 <div class="result" id="output"></div>
 
 </div>
 
+
 <script>
 
-/* LOGIN FUNCTION */
+/* LOGIN */
 
 function login(){
 
-let user=document.getElementById("username").value;
-let pass=document.getElementById("password").value;
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
 
-if(user=="admin" && pass=="1234")
+if(u=="admin" && p=="1234")
 {
 document.getElementById("loginPage").style.display="none";
 document.getElementById("mainPage").style.display="block";
@@ -121,68 +122,67 @@ alert("Invalid Login");
 }
 
 
-/* FOOD DATASET */
+/* DATASET */
 
 let foods={
 
-"apple":{cal:52,protein:0.3},
-"banana":{cal:96,protein:1.3},
-"idli":{cal:58,protein:2},
-"dosa":{cal:133,protein:3},
-"pizza":{cal:266,protein:11},
-"burger":{cal:295,protein:17},
-"biryani":{cal:290,protein:15},
-"rice":{cal:130,protein:2.7},
-"chapati":{cal:104,protein:3},
-"samosa":{cal:262,protein:6},
-"cake":{cal:257,protein:3},
-"egg":{cal:155,protein:13},
-"milk":{cal:42,protein:3.4},
-"paneer":{cal:265,protein:18},
-"salad":{cal:33,protein:2},
-"fries":{cal:312,protein:3.4},
-"noodles":{cal:138,protein:4.5},
-"pasta":{cal:131,protein:5},
-"chicken":{cal:239,protein:27},
-"fish":{cal:206,protein:22},
-"orange":{cal:47,protein:0.9},
-"grapes":{cal:69,protein:0.7},
-"mango":{cal:60,protein:0.8},
-"icecream":{cal:207,protein:3.5},
-"sandwich":{cal:250,protein:12}
+apple:{cal:52,protein:0.3},
+banana:{cal:96,protein:1.3},
+idli:{cal:58,protein:2},
+dosa:{cal:133,protein:3},
+pizza:{cal:266,protein:11},
+burger:{cal:295,protein:17},
+biryani:{cal:290,protein:15},
+rice:{cal:130,protein:2.7},
+chapati:{cal:104,protein:3},
+samosa:{cal:262,protein:6},
+cake:{cal:257,protein:3},
+egg:{cal:155,protein:13},
+milk:{cal:42,protein:3.4},
+paneer:{cal:265,protein:18},
+salad:{cal:33,protein:2},
+fries:{cal:312,protein:3},
+noodles:{cal:138,protein:4},
+pasta:{cal:131,protein:5},
+chicken:{cal:239,protein:27},
+fish:{cal:206,protein:22},
+orange:{cal:47,protein:0.9},
+grapes:{cal:69,protein:0.7},
+mango:{cal:60,protein:0.8},
+icecream:{cal:207,protein:3},
+sandwich:{cal:250,protein:12}
 
 };
 
 
-/* DETECTION */
+/* FOOD ANALYSIS */
 
-function detectFood(){
+function analyzeFood(){
 
-let file=document.getElementById("foodImage").files[0];
+let file=document.getElementById("image").files[0];
 
 if(!file)
 {
-alert("Upload Image");
+alert("Please upload image");
 return;
 }
 
 let name=file.name.toLowerCase();
 
-let detected="Unknown";
+let detected="unknown";
 
-for(let food in foods)
+for(let f in foods)
 {
-if(name.includes(food))
+if(name.includes(f))
 {
-detected=food;
+detected=f;
 break;
 }
 }
 
-if(detected=="Unknown")
+if(detected=="unknown")
 {
-document.getElementById("output").innerHTML=
-"Food not in dataset";
+document.getElementById("output").innerHTML="Food not in dataset";
 return;
 }
 
@@ -195,7 +195,7 @@ let suggestion="";
 if(cal<100)
 {
 category="Healthy Food";
-suggestion="Good for diet";
+suggestion="Good for daily diet";
 }
 else if(cal<250)
 {
