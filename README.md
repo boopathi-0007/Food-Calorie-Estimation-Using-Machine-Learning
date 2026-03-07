@@ -20,6 +20,7 @@ justify-content:center;
 align-items:center;
 background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
+background-position:center;
 }
 
 .loginBox{
@@ -39,7 +40,7 @@ padding:30px;
 }
 
 img{
-width:220px;
+width:250px;
 margin-top:15px;
 border-radius:10px;
 }
@@ -54,7 +55,7 @@ cursor:pointer;
 
 input{
 padding:10px;
-width:220px;
+width:230px;
 }
 
 </style>
@@ -62,8 +63,6 @@ width:220px;
 </head>
 
 <body>
-
-<!-- LOGIN PAGE -->
 
 <div id="loginPage">
 
@@ -79,8 +78,6 @@ width:220px;
 </div>
 
 </div>
-
-<!-- MAIN PAGE -->
 
 <div id="mainPage">
 
@@ -100,16 +97,10 @@ width:220px;
 
 <script>
 
-/* LOGIN */
-
 function login(){
-
 document.getElementById("loginPage").style.display="none";
 document.getElementById("mainPage").style.display="block";
-
 }
-
-/* FOOD DATASET */
 
 let foods={
 
@@ -174,38 +165,32 @@ let category="";
 let suggestion="";
 let healthTip="";
 
-/* CATEGORY */
-
 if(cal<150){
-
 category="Healthy Food";
 suggestion="Good for diet";
 healthTip="Eat regularly with vegetables";
-
 }
-
 else if(cal<280){
-
 category="Moderate Food";
 suggestion="Eat in balanced diet";
-healthTip="Drink more water and maintain balance";
-
+healthTip="Drink more water and maintain balanced diet";
 }
-
 else{
-
 category="High Calorie Food";
 suggestion="Eat occasionally";
 healthTip="Do exercise to burn calories";
-
 }
+
+/* INTERNET IMAGE */
+
+let imageURL="https://source.unsplash.com/400x300/?"+f;
 
 /* OUTPUT */
 
 document.getElementById("result").innerHTML=
 
 "<h2>"+f+"</h2>"+
-"<img src='images/"+f+".jpg'>"+
+"<img src='"+imageURL+"'>"+
 "<p><b>Calories :</b> "+cal+" kcal</p>"+
 "<p><b>Protein :</b> "+protein+" g</p>"+
 "<p><b>Category :</b> "+category+"</p>"+
