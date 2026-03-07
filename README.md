@@ -1,17 +1,21 @@
-# Food-Calorie-Estimation-Using-Machine-Learning
 <!DOCTYPE html>
 <html>
 <head>
-<title>Food Calorie Estimation</title>
+
+<title>Food Calorie Estimation Using AI</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
 
 <style>
 
 body{
 font-family:Arial;
-text-align:center;
-background:#f2f2f2;
 margin:0;
 padding:0;
+background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") no-repeat center center fixed;
+background-size:cover;
+text-align:center;
 }
 
 .container{
@@ -19,11 +23,11 @@ margin-top:80px;
 }
 
 .card{
-background:white;
+background:rgba(255,255,255,0.9);
 padding:30px;
+border-radius:12px;
 display:inline-block;
-border-radius:10px;
-box-shadow:0 0 10px gray;
+box-shadow:0 0 15px black;
 }
 
 input,button{
@@ -50,12 +54,13 @@ display:none;
 }
 
 img{
-width:280px;
+width:260px;
 margin-top:20px;
 border-radius:10px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -63,11 +68,13 @@ border-radius:10px;
 <div class="container">
 
 <!-- LOGIN PAGE -->
+
 <div id="loginPage" class="card">
 
 <h2>Food Calorie Estimation Login</h2>
 
 <input type="text" id="username" placeholder="Username"><br>
+
 <input type="password" id="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
@@ -78,14 +85,20 @@ border-radius:10px;
 
 
 <!-- HOME PAGE -->
+
 <div id="homePage" class="card">
 
 <h2>Upload Food Image</h2>
 
-<input type="file" id="foodImage" accept="image/*"><br>
+<input type="file" id="imageUpload" accept="image/*"><br>
 
-<button onclick="estimateCalories()">Estimate Calories</button>
+<button onclick="predict()">Detect Food</button>
+
 <button onclick="logout()">Logout</button>
+
+<br>
+
+<img id="preview">
 
 <div id="result"></div>
 
@@ -93,19 +106,36 @@ border-radius:10px;
 
 </div>
 
-
 <script>
+
+let model;
+
+/* PASTE YOUR TEACHABLE MACHINE MODEL LINK */
+
+const MODEL_URL="PASTE_MODEL_LINK_HERE/";
+
+async function loadModel(){
+
+model=await tmImage.load(MODEL_URL+"model.json",MODEL_URL+"metadata.json");
+
+}
+
+loadModel();
+
+
 
 /* LOGIN */
 
 function login(){
 
 let u=document.getElementById("username").value;
+
 let p=document.getElementById("password").value;
 
 if(u==="admin" && p==="1234"){
 
 document.getElementById("loginPage").style.display="none";
+
 document.getElementById("homePage").style.display="block";
 
 }else{
@@ -117,58 +147,85 @@ document.getElementById("error").innerText="Invalid Login";
 }
 
 
-/* 20 FOOD DATASET */
 
-let foodDataset=[
+/* FOOD DATASET */
 
-{name:"Pizza",calories:266,protein:11},
-{name:"Burger",calories:295,protein:17},
-{name:"Rice",calories:130,protein:2},
-{name:"Pasta",calories:158,protein:5},
-{name:"Apple",calories:52,protein:0.3},
-{name:"Banana",calories:89,protein:1.1},
-{name:"Idli",calories:58,protein:2},
-{name:"Dosa",calories:168,protein:3},
-{name:"Puri",calories:98,protein:2},
-{name:"Fried Chicken",calories:246,protein:27},
-{name:"Sandwich",calories:150,protein:6},
-{name:"Salad",calories:75,protein:2},
-{name:"Ice Cream",calories:207,protein:3.5},
-{name:"Chocolate",calories:546,protein:4.9},
-{name:"Biryani",calories:290,protein:15},
-{name:"Chapati",calories:120,protein:3},
-{name:"Noodles",calories:138,protein:4},
-{name:"French Fries",calories:312,protein:3.4},
-{name:"Egg Omelette",calories:154,protein:11},
-{name:"Paneer Curry",calories:265,protein:18}
+const foodData={
 
-];
+Idli:{cal:58,protein:2},
+Dosa:{cal:168,protein:3},
+Pizza:{cal:266,protein:11},
+Burger:{cal:295,protein:17},
+Rice:{cal:130,protein:2},
+Chapati:{cal:120,protein:3},
+Pasta:{cal:158,protein:5},
+Sandwich:{cal:150,protein:6},
+Noodles:{cal:138,protein:4},
+Biryani:{cal:290,protein:15},
+Apple:{cal:52,protein:0.3},
+Banana:{cal:89,protein:1.1},
+IceCream:{cal:207,protein:3.5},
+Chocolate:{cal:546,protein:4.9},
+Salad:{cal:75,protein:2},
+Fries:{cal:312,protein:3.4},
+Omelette:{cal:154,protein:11},
+Paneer:{cal:265,protein:18},
+FriedChicken:{cal:246,protein:27},
+Puri:{cal:98,protein:2}
+
+};
 
 
-/* CALORIE ESTIMATION */
 
-function estimateCalories(){
+/* AI PREDICTION */
 
-let file=document.getElementById("foodImage");
+async function predict(){
 
-if(file.files.length===0){
+let file=document.getElementById("imageUpload").files[0];
 
-alert("Upload food image");
+if(!file){
+
+alert("Upload Image");
+
 return;
 
 }
 
-let randomFood=foodDataset[Math.floor(Math.random()*foodDataset.length)];
+let img=document.getElementById("preview");
+
+img.src=URL.createObjectURL(file);
+
+await img.decode();
+
+let prediction=await model.predict(img);
+
+let highest=prediction[0];
+
+for(let i=1;i<prediction.length;i++){
+
+if(prediction[i].probability>highest.probability){
+
+highest=prediction[i];
+
+}
+
+}
+
+let food=highest.className;
+
+let cal=foodData[food]?.cal || "Unknown";
+
+let protein=foodData[food]?.protein || "Unknown";
 
 let suggestion="";
 
-if(randomFood.calories<100){
+if(cal<100){
 
 suggestion="Low calorie food - Good for diet";
 
-}else if(randomFood.calories<200){
+}else if(cal<200){
 
-suggestion="Moderate calories - Balanced food";
+suggestion="Moderate calories - Balanced meal";
 
 }else{
 
@@ -176,23 +233,15 @@ suggestion="High calories - Eat in moderation";
 
 }
 
-let reader=new FileReader();
-
-reader.onload=function(e){
-
 document.getElementById("result").innerHTML=
 
-"<h3>Food Detected: "+randomFood.name+"</h3>"+
-"<h3>Estimated Calories: "+randomFood.calories+" kcal</h3>"+
-"<h3>Protein: "+randomFood.protein+" g</h3>"+
-"<h3>Health Suggestion: "+suggestion+"</h3>"+
-"<img src='"+e.target.result+"'>";
-
-};
-
-reader.readAsDataURL(file.files[0]);
+"<h3>Food Detected: "+food+"</h3>"+
+"<h3>Calories: "+cal+" kcal</h3>"+
+"<h3>Protein: "+protein+" g</h3>"+
+"<h3>Health Suggestion: "+suggestion+"</h3>";
 
 }
+
 
 
 /* LOGOUT */
@@ -200,10 +249,8 @@ reader.readAsDataURL(file.files[0]);
 function logout(){
 
 document.getElementById("homePage").style.display="none";
-document.getElementById("loginPage").style.display="block";
 
-document.getElementById("foodImage").value="";
-document.getElementById("result").innerHTML="";
+document.getElementById("loginPage").style.display="block";
 
 }
 
