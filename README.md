@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Food Calorie Estimation</title>
+<title>AI Food Nutrition Analyzer</title>
 
 <style>
 
 body{
+font-family: Arial;
 margin:0;
-font-family:Arial;
-background:#f2f2f2;
-text-align:center;
+padding:0;
 }
 
-.container{
-margin-top:80px;
+/* LOGIN PAGE */
+
+#loginPage{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
+background-size:cover;
+background-position:center;
 }
 
-.card{
+.loginBox{
 background:white;
 padding:30px;
 border-radius:10px;
-display:inline-block;
-box-shadow:0 0 10px gray;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
 }
 
-input,select,button{
+input{
 padding:10px;
 margin:10px;
-width:220px;
+width:200px;
 }
 
 button{
-background:#ff5722;
+padding:10px 20px;
+background:green;
 color:white;
 border:none;
+cursor:pointer;
 }
 
-#homePage{
+/* MAIN PAGE */
+
+#mainPage{
 display:none;
+text-align:center;
+padding:30px;
+}
+
+.result{
+margin-top:20px;
+font-size:18px;
 }
 
 </style>
@@ -45,164 +63,158 @@ display:none;
 
 <body>
 
-<div class="container">
+<!-- LOGIN PAGE -->
 
-<div id="loginPage" class="card">
+<div id="loginPage">
 
-<h2>Food Calorie Estimation Login</h2>
+<div class="loginBox">
+
+<h2>Login</h2>
 
 <input type="text" id="username" placeholder="Username"><br>
+
 <input type="password" id="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
-<p id="error" style="color:red;"></p>
+</div>
 
 </div>
 
-<div id="homePage" class="card">
+<!-- MAIN PAGE -->
 
-<h2>Upload Food Image</h2>
+<div id="mainPage">
 
-<input type="file" id="imageUpload"><br>
+<h1>AI Food Nutrition Analyzer</h1>
 
-<select id="foodSelect">
+<p>Upload Food Image</p>
 
-<option value="">Select Food</option>
-<option>Pizza</option>
-<option>Burger</option>
-<option>Idli</option>
-<option>Dosa</option>
-<option>Rice</option>
-<option>Biryani</option>
-<option>Pasta</option>
-<option>Sandwich</option>
-<option>Noodles</option>
-<option>Apple</option>
-<option>Banana</option>
-<option>IceCream</option>
-<option>Chocolate</option>
-<option>Salad</option>
-<option>Fries</option>
-<option>Omelette</option>
-<option>Paneer</option>
-<option>FriedChicken</option>
-<option>Puri</option>
-<option>Chapati</option>
-<option>Soup</option>
-<option>Cake</option>
-<option>Donut</option>
-<option>Milk</option>
-<option>Cheese</option>
+<input type="file" id="foodImage">
 
-</select>
+<br><br>
 
-<br>
+<button onclick="detectFood()">Analyze Food</button>
 
-<button onclick="predict()">Show Calories</button>
-
-<button onclick="logout()">Logout</button>
-
-<div id="result"></div>
-
-</div>
+<div class="result" id="output"></div>
 
 </div>
 
 <script>
 
+/* LOGIN FUNCTION */
+
 function login(){
 
-let u=document.getElementById("username").value;
-let p=document.getElementById("password").value;
+let user=document.getElementById("username").value;
+let pass=document.getElementById("password").value;
 
-if(u==="admin" && p==="1234"){
-
+if(user=="admin" && pass=="1234")
+{
 document.getElementById("loginPage").style.display="none";
-document.getElementById("homePage").style.display="block";
-
-}else{
-
-document.getElementById("error").innerText="Invalid Login";
-
+document.getElementById("mainPage").style.display="block";
+}
+else
+{
+alert("Invalid Login");
 }
 
 }
 
 
+/* FOOD DATASET */
 
-const foodData={
+let foods={
 
-Pizza:{cal:266,protein:11},
-Burger:{cal:295,protein:17},
-Idli:{cal:58,protein:2},
-Dosa:{cal:168,protein:3},
-Rice:{cal:130,protein:2},
-Biryani:{cal:290,protein:15},
-Pasta:{cal:158,protein:5},
-Sandwich:{cal:150,protein:6},
-Noodles:{cal:138,protein:4},
-Apple:{cal:52,protein:0.3},
-Banana:{cal:89,protein:1.1},
-IceCream:{cal:207,protein:3.5},
-Chocolate:{cal:546,protein:4.9},
-Salad:{cal:75,protein:2},
-Fries:{cal:312,protein:3.4},
-Omelette:{cal:154,protein:11},
-Paneer:{cal:265,protein:18},
-FriedChicken:{cal:246,protein:27},
-Puri:{cal:98,protein:2},
-Chapati:{cal:120,protein:3},
-Soup:{cal:90,protein:3},
-Cake:{cal:257,protein:4},
-Donut:{cal:452,protein:4},
-Milk:{cal:103,protein:8},
-Cheese:{cal:402,protein:25}
+"apple":{cal:52,protein:0.3},
+"banana":{cal:96,protein:1.3},
+"idli":{cal:58,protein:2},
+"dosa":{cal:133,protein:3},
+"pizza":{cal:266,protein:11},
+"burger":{cal:295,protein:17},
+"biryani":{cal:290,protein:15},
+"rice":{cal:130,protein:2.7},
+"chapati":{cal:104,protein:3},
+"samosa":{cal:262,protein:6},
+"cake":{cal:257,protein:3},
+"egg":{cal:155,protein:13},
+"milk":{cal:42,protein:3.4},
+"paneer":{cal:265,protein:18},
+"salad":{cal:33,protein:2},
+"fries":{cal:312,protein:3.4},
+"noodles":{cal:138,protein:4.5},
+"pasta":{cal:131,protein:5},
+"chicken":{cal:239,protein:27},
+"fish":{cal:206,protein:22},
+"orange":{cal:47,protein:0.9},
+"grapes":{cal:69,protein:0.7},
+"mango":{cal:60,protein:0.8},
+"icecream":{cal:207,protein:3.5},
+"sandwich":{cal:250,protein:12}
 
 };
 
 
+/* DETECTION */
 
-function predict(){
+function detectFood(){
 
-let food=document.getElementById("foodSelect").value;
+let file=document.getElementById("foodImage").files[0];
 
-if(!food){
-
-alert("Select food");
-
+if(!file)
+{
+alert("Upload Image");
 return;
-
 }
 
-let cal=foodData[food].cal;
-let protein=foodData[food].protein;
+let name=file.name.toLowerCase();
 
+let detected="Unknown";
+
+for(let food in foods)
+{
+if(name.includes(food))
+{
+detected=food;
+break;
+}
+}
+
+if(detected=="Unknown")
+{
+document.getElementById("output").innerHTML=
+"Food not in dataset";
+return;
+}
+
+let cal=foods[detected].cal;
+let protein=foods[detected].protein;
+
+let category="";
 let suggestion="";
 
-if(cal<100){
-suggestion="Low calorie food";
-}else if(cal<200){
-suggestion="Moderate calories";
-}else{
-suggestion="High calories";
+if(cal<100)
+{
+category="Healthy Food";
+suggestion="Good for diet";
+}
+else if(cal<250)
+{
+category="Moderate Food";
+suggestion="Eat in balanced diet";
+}
+else
+{
+category="High Calorie Food";
+suggestion="Eat in moderation";
 }
 
-document.getElementById("result").innerHTML=
+document.getElementById("output").innerHTML=
 
-"<h3>Food: "+food+"</h3>"+
-"<h3>Calories: "+cal+" kcal</h3>"+
-"<h3>Protein: "+protein+" g</h3>"+
-"<h3>Suggestion: "+suggestion+"</h3>";
-
-}
-
-
-
-function logout(){
-
-document.getElementById("homePage").style.display="none";
-document.getElementById("loginPage").style.display="block";
+"<b>Food Detected :</b> "+detected+"<br><br>"+
+"<b>Calories :</b> "+cal+" kcal<br><br>"+
+"<b>Protein :</b> "+protein+" g<br><br>"+
+"<b>Category :</b> "+category+"<br><br>"+
+"<b>Suggestion :</b> "+suggestion;
 
 }
 
