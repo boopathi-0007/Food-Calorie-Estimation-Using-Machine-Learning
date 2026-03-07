@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>Food Calorie Estimation Using AI</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
+<title>Food Calorie Estimation</title>
 
 <style>
 
 body{
-font-family:Arial;
 margin:0;
-padding:0;
+font-family:Arial;
 background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") no-repeat center center fixed;
 background-size:cover;
 text-align:center;
@@ -30,7 +25,7 @@ display:inline-block;
 box-shadow:0 0 15px black;
 }
 
-input,button{
+input,select,button{
 padding:10px;
 margin:10px;
 width:220px;
@@ -60,7 +55,6 @@ border-radius:10px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -90,9 +84,42 @@ border-radius:10px;
 
 <h2>Upload Food Image</h2>
 
-<input type="file" id="imageUpload" accept="image/*"><br>
+<input type="file" id="imageUpload"><br>
 
-<button onclick="predict()">Detect Food</button>
+<select id="foodSelect">
+
+<option value="">Select Food</option>
+<option>Pizza</option>
+<option>Burger</option>
+<option>Idli</option>
+<option>Dosa</option>
+<option>Rice</option>
+<option>Biryani</option>
+<option>Pasta</option>
+<option>Sandwich</option>
+<option>Noodles</option>
+<option>Apple</option>
+<option>Banana</option>
+<option>IceCream</option>
+<option>Chocolate</option>
+<option>Salad</option>
+<option>Fries</option>
+<option>Omelette</option>
+<option>Paneer</option>
+<option>FriedChicken</option>
+<option>Puri</option>
+<option>Chapati</option>
+<option>Soup</option>
+<option>Cake</option>
+<option>Donut</option>
+<option>Milk</option>
+<option>Cheese</option>
+
+</select>
+
+<br>
+
+<button onclick="predict()">Show Calories</button>
 
 <button onclick="logout()">Logout</button>
 
@@ -106,36 +133,19 @@ border-radius:10px;
 
 </div>
 
+
 <script>
-
-let model;
-
-/* PASTE YOUR TEACHABLE MACHINE MODEL LINK */
-
-const MODEL_URL="PASTE_MODEL_LINK_HERE/";
-
-async function loadModel(){
-
-model=await tmImage.load(MODEL_URL+"model.json",MODEL_URL+"metadata.json");
-
-}
-
-loadModel();
-
-
 
 /* LOGIN */
 
 function login(){
 
 let u=document.getElementById("username").value;
-
 let p=document.getElementById("password").value;
 
 if(u==="admin" && p==="1234"){
 
 document.getElementById("loginPage").style.display="none";
-
 document.getElementById("homePage").style.display="block";
 
 }else{
@@ -147,21 +157,19 @@ document.getElementById("error").innerText="Invalid Login";
 }
 
 
-
-/* FOOD DATASET */
+/* 25 DATASET */
 
 const foodData={
 
-Idli:{cal:58,protein:2},
-Dosa:{cal:168,protein:3},
 Pizza:{cal:266,protein:11},
 Burger:{cal:295,protein:17},
+Idli:{cal:58,protein:2},
+Dosa:{cal:168,protein:3},
 Rice:{cal:130,protein:2},
-Chapati:{cal:120,protein:3},
+Biryani:{cal:290,protein:15},
 Pasta:{cal:158,protein:5},
 Sandwich:{cal:150,protein:6},
 Noodles:{cal:138,protein:4},
-Biryani:{cal:290,protein:15},
 Apple:{cal:52,protein:0.3},
 Banana:{cal:89,protein:1.1},
 IceCream:{cal:207,protein:3.5},
@@ -171,21 +179,26 @@ Fries:{cal:312,protein:3.4},
 Omelette:{cal:154,protein:11},
 Paneer:{cal:265,protein:18},
 FriedChicken:{cal:246,protein:27},
-Puri:{cal:98,protein:2}
+Puri:{cal:98,protein:2},
+Chapati:{cal:120,protein:3},
+Soup:{cal:90,protein:3},
+Cake:{cal:257,protein:4},
+Donut:{cal:452,protein:4},
+Milk:{cal:103,protein:8},
+Cheese:{cal:402,protein:25}
 
 };
 
 
 
-/* AI PREDICTION */
-
-async function predict(){
+function predict(){
 
 let file=document.getElementById("imageUpload").files[0];
+let food=document.getElementById("foodSelect").value;
 
-if(!file){
+if(!file || !food){
 
-alert("Upload Image");
+alert("Upload image and select food");
 
 return;
 
@@ -195,47 +208,28 @@ let img=document.getElementById("preview");
 
 img.src=URL.createObjectURL(file);
 
-await img.decode();
-
-let prediction=await model.predict(img);
-
-let highest=prediction[0];
-
-for(let i=1;i<prediction.length;i++){
-
-if(prediction[i].probability>highest.probability){
-
-highest=prediction[i];
-
-}
-
-}
-
-let food=highest.className;
-
-let cal=foodData[food]?.cal || "Unknown";
-
-let protein=foodData[food]?.protein || "Unknown";
+let cal=foodData[food].cal;
+let protein=foodData[food].protein;
 
 let suggestion="";
 
 if(cal<100){
 
-suggestion="Low calorie food - Good for diet";
+suggestion="Low calorie food";
 
 }else if(cal<200){
 
-suggestion="Moderate calories - Balanced meal";
+suggestion="Moderate calories";
 
 }else{
 
-suggestion="High calories - Eat in moderation";
+suggestion="High calories";
 
 }
 
 document.getElementById("result").innerHTML=
 
-"<h3>Food Detected: "+food+"</h3>"+
+"<h3>Food: "+food+"</h3>"+
 "<h3>Calories: "+cal+" kcal</h3>"+
 "<h3>Protein: "+protein+" g</h3>"+
 "<h3>Health Suggestion: "+suggestion+"</h3>";
@@ -249,7 +243,6 @@ document.getElementById("result").innerHTML=
 function logout(){
 
 document.getElementById("homePage").style.display="none";
-
 document.getElementById("loginPage").style.display="block";
 
 }
