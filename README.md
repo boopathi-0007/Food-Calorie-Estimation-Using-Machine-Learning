@@ -95,6 +95,7 @@ margin:auto;
 <h2>Login</h2>
 
 <input id="user" placeholder="Username"><br><br>
+
 <input id="pass" type="password" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
@@ -126,6 +127,7 @@ margin:auto;
 <h3>BMI Calculator</h3>
 
 <input id="height" placeholder="Height cm">
+
 <input id="weight" placeholder="Weight kg">
 
 <button onclick="bmi()">Check BMI</button>
@@ -148,11 +150,15 @@ let u=document.getElementById("user").value
 let p=document.getElementById("pass").value
 
 if(u!="" && p!=""){
+
 document.getElementById("loginPage").style.display="none"
 document.getElementById("mainPage").style.display="block"
+
 }
 else{
+
 alert("Enter username and password")
+
 }
 
 }
@@ -160,7 +166,9 @@ alert("Enter username and password")
 /* DARK MODE */
 
 function darkMode(){
+
 document.body.classList.toggle("dark")
+
 }
 
 /* DATASET */
@@ -269,55 +277,71 @@ document.getElementById("result").innerHTML=
 "<p>Protein : "+protein+" g</p>"+
 "<p>AI Recommendation : "+recommendation+"</p>"
 
-/* GRAPH */
-
 let ctx=document.getElementById("chart")
 
 new Chart(ctx,{
-
 type:'bar',
-
 data:{
 labels:['Calories','Protein'],
-
 datasets:[{
-
 label:f,
-
 data:[cal,protein]
-
 }]
-
 }
-
 })
 
 }
 
-/* BMI */
+/* BMI CALCULATOR (UPDATED) */
 
 function bmi(){
 
 let h=document.getElementById("height").value/100
 let w=document.getElementById("weight").value
 
+if(h==0 || w==0){
+document.getElementById("bmiResult").innerHTML="Enter valid height and weight"
+return
+}
+
 let b=w/(h*h)
 
+let status=""
 let suggestion=""
 
 if(b<18.5){
-suggestion="Eat high calorie foods"
+
+status="Underweight"
+suggestion="Increase calorie intake. Eat rice, milk, eggs, banana and nuts."
+
 }
-else if(b<25){
-suggestion="Maintain current diet"
+
+else if(b>=18.5 && b<25){
+
+status="Normal Weight"
+suggestion="Maintain balanced diet and regular exercise."
+
 }
+
+else if(b>=25 && b<30){
+
+status="Overweight"
+suggestion="Reduce oily foods and sweets. Eat more vegetables and exercise regularly."
+
+}
+
 else{
-suggestion="Reduce oily foods"
+
+status="Obese"
+suggestion="Avoid junk food and high calorie foods. Follow a strict healthy diet."
+
 }
 
 document.getElementById("bmiResult").innerHTML=
 
-"BMI : "+b.toFixed(2)+"<br>Diet Suggestion : "+suggestion
+"<h3>BMI : "+b.toFixed(2)+"</h3>"+
+"<p>Status : "+status+"</p>"+
+"<p>Diet Suggestion : "+suggestion+"</p>"
 
 }
 
