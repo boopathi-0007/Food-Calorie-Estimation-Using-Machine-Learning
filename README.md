@@ -51,7 +51,7 @@ cursor:pointer;
 border-radius:5px;
 }
 
-/* MAIN PAGE WITH BACKGROUND */
+/* MAIN PAGE */
 
 #mainPage{
 display:none;
@@ -79,7 +79,7 @@ color:white;
 background:#444;
 }
 
-/* RESULT BOX */
+/* RESULT */
 
 #result{
 margin-top:20px;
@@ -97,8 +97,6 @@ padding:10px;
 border-radius:10px;
 display:inline-block;
 }
-
-/* CHART */
 
 canvas{
 max-width:400px;
@@ -142,6 +140,8 @@ border-radius:10px;
 
 <br><br>
 
+<!-- FOOD SEARCH -->
+
 <input list="foodList" id="foodName" placeholder="Search Food">
 
 <datalist id="foodList"></datalist>
@@ -150,21 +150,24 @@ border-radius:10px;
 
 <button onclick="analyze()">Analyze Food</button>
 
+<!-- FOOD RESULT -->
+
+<div id="result"></div>
+
+<canvas id="chart"></canvas>
+
 <br><br>
+
+<!-- BMI CALCULATOR AFTER FOOD RESULT -->
 
 <h3>BMI Calculator</h3>
 
 <input id="height" placeholder="Height cm">
-
 <input id="weight" placeholder="Weight kg">
 
 <button onclick="bmi()">Check BMI</button>
 
 <div id="bmiResult"></div>
-
-<div id="result"></div>
-
-<canvas id="chart"></canvas>
 
 </div>
 
@@ -272,7 +275,7 @@ list.appendChild(option)
 
 }
 
-/* FOOD ANALYSIS */
+/* FOOD ANALYZER */
 
 function analyze(){
 
@@ -320,7 +323,7 @@ data:[cal,protein]
 
 }
 
-/* BMI CALCULATOR */
+/* BMI */
 
 function bmi(){
 
@@ -347,11 +350,11 @@ suggestion="Maintain balanced diet and regular exercise."
 }
 else if(b>=25 && b<30){
 status="Overweight"
-suggestion="Reduce oily foods and sweets. Eat more vegetables and exercise."
+suggestion="Reduce oily foods and sweets. Eat vegetables and exercise."
 }
 else{
 status="Obese"
-suggestion="Avoid junk food and high calorie foods. Follow a strict healthy diet."
+suggestion="Avoid junk food and high calorie foods. Follow strict healthy diet."
 }
 
 document.getElementById("bmiResult").innerHTML=
