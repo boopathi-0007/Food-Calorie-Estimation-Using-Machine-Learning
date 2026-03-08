@@ -12,7 +12,6 @@ body{
 font-family:Arial;
 margin:0;
 background:#f5f5f5;
-color:black;
 }
 
 /* LOGIN PAGE */
@@ -31,11 +30,12 @@ background:white;
 padding:30px;
 border-radius:10px;
 text-align:center;
+width:250px;
 }
 
-input,select{
+input{
 padding:10px;
-width:220px;
+width:200px;
 margin:5px;
 }
 
@@ -45,7 +45,6 @@ background:green;
 color:white;
 border:none;
 cursor:pointer;
-margin-top:10px;
 }
 
 #mainPage{
@@ -71,7 +70,7 @@ margin:auto;
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
 
 <div id="loginPage">
 
@@ -79,15 +78,14 @@ margin:auto;
 
 <h2>Login</h2>
 
-<input id="user" placeholder="Username"><br>
-<input id="pass" type="password" placeholder="Password"><br>
+<input type="text" id="username" placeholder="Username"><br>
+<input type="password" id="password" placeholder="Password"><br>
 
 <button onclick="login()">Login</button>
 
 </div>
 
 </div>
-
 
 <!-- MAIN PAGE -->
 
@@ -99,11 +97,11 @@ margin:auto;
 
 <h3>Search Food</h3>
 
-<input list="foodsList" id="foodInput" placeholder="Type food name">
+<input list="foodList" id="foodInput" placeholder="Type food name">
 
-<datalist id="foodsList"></datalist>
+<datalist id="foodList"></datalist>
 
-<br>
+<br><br>
 
 <button onclick="analyze()">Analyze Food</button>
 
@@ -120,7 +118,7 @@ margin:auto;
 <input id="weight" placeholder="Weight (kg)">
 <br>
 <input id="height" placeholder="Height (cm)">
-<br>
+<br><br>
 
 <button onclick="calculateBMI()">Calculate BMI</button>
 
@@ -133,20 +131,19 @@ margin:auto;
 
 <script>
 
-/* LOGIN */
+/* LOGIN FUNCTION */
 
 function login(){
 
-let u=document.getElementById("user").value
-let p=document.getElementById("pass").value
+let user=document.getElementById("username").value
+let pass=document.getElementById("password").value
 
-if(u=="admin" && p=="1234"){
+if(user==="admin" && pass==="1234"){
 
 document.getElementById("loginPage").style.display="none"
 document.getElementById("mainPage").style.display="block"
 
-}
-else{
+}else{
 
 alert("Invalid Login")
 
@@ -157,14 +154,13 @@ alert("Invalid Login")
 /* DARK MODE */
 
 function toggleDark(){
-
 document.body.classList.toggle("dark")
-
 }
 
 /* FOOD DATASET */
 
 let foods={
+
 biryani:{cal:290,protein:15},
 dosa:{cal:133,protein:3},
 idli:{cal:58,protein:2},
@@ -184,53 +180,13 @@ rajma:{cal:240,protein:9},
 dal:{cal:180,protein:8},
 paneer:{cal:300,protein:10},
 samosa:{cal:262,protein:6},
-pakora:{cal:220,protein:5},
-pav_bhaji:{cal:400,protein:10},
-vada_pav:{cal:300,protein:8},
-dhokla:{cal:160,protein:6},
-khichdi:{cal:180,protein:6},
-jalebi:{cal:300,protein:2},
-gulab_jamun:{cal:350,protein:4},
-kheer:{cal:250,protein:6},
-laddu:{cal:280,protein:5},
-halwa:{cal:290,protein:4},
-mysore_pak:{cal:310,protein:4},
-butter_chicken:{cal:300,protein:20},
-tandoori_chicken:{cal:220,protein:25},
-fish_curry:{cal:200,protein:22},
-egg_curry:{cal:180,protein:13},
-fried_rice:{cal:230,protein:6},
-noodles:{cal:220,protein:5},
-maggi:{cal:205,protein:4},
-chole_bhature:{cal:350,protein:12},
-aloo_paratha:{cal:260,protein:6},
-gobi_paratha:{cal:240,protein:6},
-paneer_paratha:{cal:280,protein:9},
-veg_roll:{cal:210,protein:5},
-chicken_roll:{cal:260,protein:12},
-paneer_roll:{cal:240,protein:9},
-veg_cutlet:{cal:180,protein:4},
-bread_omelette:{cal:200,protein:10},
-omelette:{cal:150,protein:11},
-milk:{cal:120,protein:8},
-curd:{cal:98,protein:5},
-banana:{cal:105,protein:1},
-apple:{cal:95,protein:1},
-orange:{cal:62,protein:1},
-mango:{cal:150,protein:2},
-grapes:{cal:104,protein:1},
-watermelon:{cal:85,protein:1},
-papaya:{cal:120,protein:1},
-pineapple:{cal:82,protein:1},
-carrot:{cal:41,protein:1},
-beetroot:{cal:43,protein:2},
-potato:{cal:163,protein:4},
-spinach:{cal:23,protein:3}
+pakora:{cal:220,protein:5}
+
 }
 
-/* AUTOCOMPLETE LOAD */
+/* AUTOCOMPLETE */
 
-let list=document.getElementById("foodsList")
+let list=document.getElementById("foodList")
 
 for(let f in foods){
 
@@ -240,7 +196,7 @@ list.appendChild(option)
 
 }
 
-/* ANALYZE */
+/* CHART */
 
 let chart
 
@@ -249,27 +205,18 @@ function analyze(){
 let f=document.getElementById("foodInput").value
 
 if(!foods[f]){
-
 document.getElementById("result").innerHTML="Food not found"
 return
-
 }
 
 let cal=foods[f].cal
 let protein=foods[f].protein
 
-let category=""
-
-if(cal<150){category="Healthy"}
-else if(cal<280){category="Moderate"}
-else{category="High Calorie"}
-
 document.getElementById("result").innerHTML=
 
 "<h3>"+f+"</h3>"+
 "Calories: "+cal+" kcal<br>"+
-"Protein: "+protein+" g<br>"+
-"Category: "+category
+"Protein: "+protein+" g"
 
 if(chart){chart.destroy()}
 
@@ -304,38 +251,31 @@ let rec=""
 if(bmi<18.5){
 
 msg="Underweight"
-rec="Recommended: milk, paneer, banana, egg"
+rec="Eat milk, banana, paneer"
 
 }
-
 else if(bmi<25){
 
 msg="Normal"
-rec="Recommended: chapati, dal, fruits"
+rec="Maintain balanced diet"
 
 }
-
 else if(bmi<30){
 
 msg="Overweight"
-rec="Recommended: salad, idli, vegetable soup"
+rec="Eat salad, idli, soup"
 
 }
-
 else{
 
 msg="Obese"
-rec="Recommended: spinach, soup, fruits"
+rec="Reduce calories, eat vegetables"
 
 }
 
-document.getElementById("bmiResult").innerHTML=
+document.getElementById("bmiResult").innerHTML="BMI: "+bmi+" ("+msg+")"
 
-"BMI: "+bmi+" ("+msg+")"
-
-document.getElementById("recommend").innerHTML=
-
-rec
+document.getElementById("recommend").innerHTML=rec
 
 }
 
