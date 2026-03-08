@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <title>Indian Food Nutrition Analyzer</title>
@@ -9,36 +8,17 @@
 
 body{
 font-family:Arial;
-margin:0;
 text-align:center;
 background:#f5f5f5;
 }
 
-#loginPage{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background-image:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
-background-size:cover;
+h1{
+margin-top:40px;
 }
 
-.loginBox{
-background:white;
-padding:30px;
-border-radius:10px;
-}
-
-#mainPage{
-display:none;
-padding:30px;
-}
-
-img{
-width:280px;
-margin-top:20px;
-border-radius:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.3);
+input{
+padding:10px;
+width:240px;
 }
 
 button{
@@ -46,13 +26,14 @@ padding:10px 20px;
 background:green;
 color:white;
 border:none;
-cursor:pointer;
+margin-top:10px;
 font-size:16px;
 }
 
-input{
-padding:10px;
-width:230px;
+img{
+width:300px;
+border-radius:10px;
+margin-top:20px;
 }
 
 #result{
@@ -66,24 +47,6 @@ font-size:18px;
 
 <body>
 
-<div id="loginPage">
-
-<div class="loginBox">
-
-<h2>Login</h2>
-
-<input type="text" placeholder="Username"><br><br>
-<input type="password" placeholder="Password"><br><br>
-
-<button onclick="login()">Login</button>
-
-</div>
-
-</div>
-
-
-<div id="mainPage">
-
 <h1>Indian Food Nutrition Analyzer</h1>
 
 <input type="text" id="foodName" placeholder="Example: dosa">
@@ -94,118 +57,57 @@ font-size:18px;
 
 <div id="result"></div>
 
-</div>
-
-
 <script>
-
-function login(){
-
-document.getElementById("loginPage").style.display="none";
-document.getElementById("mainPage").style.display="block";
-
-}
 
 let foods={
 
-idli:{cal:58,protein:2},
-dosa:{cal:133,protein:3},
-pongal:{cal:180,protein:6},
-upma:{cal:120,protein:3},
-vada:{cal:150,protein:4},
-sambar:{cal:90,protein:5},
-rasam:{cal:60,protein:2},
-curd_rice:{cal:180,protein:6},
-lemon_rice:{cal:200,protein:4},
-tamarind_rice:{cal:210,protein:4},
-veg_biryani:{cal:250,protein:7},
-chicken_biryani:{cal:290,protein:15},
-mutton_biryani:{cal:320,protein:18},
-chapati:{cal:104,protein:3},
-parotta:{cal:300,protein:6},
-poori:{cal:250,protein:5},
-naan:{cal:260,protein:6},
-paneer_butter_masala:{cal:300,protein:10},
-palak_paneer:{cal:280,protein:11},
-rajma:{cal:240,protein:9},
-dal_tadka:{cal:180,protein:8},
-dal_makhani:{cal:300,protein:10},
-aloo_paratha:{cal:260,protein:6},
-gobi_paratha:{cal:240,protein:6},
-paneer_paratha:{cal:280,protein:9},
-veg_samosa:{cal:262,protein:6},
-pakora:{cal:220,protein:5},
-pav_bhaji:{cal:400,protein:10},
-vada_pav:{cal:300,protein:8},
-misal_pav:{cal:350,protein:12},
-dhokla:{cal:160,protein:6},
-thepla:{cal:200,protein:5},
-khichdi:{cal:180,protein:6},
-poha:{cal:180,protein:4},
-jalebi:{cal:300,protein:2},
-gulab_jamun:{cal:350,protein:4}
+idli:{cal:58,protein:2,img:"https://upload.wikimedia.org/wikipedia/commons/3/3f/Idli_Sambar.jpg"},
+dosa:{cal:133,protein:3,img:"https://upload.wikimedia.org/wikipedia/commons/5/5f/Masala_Dosa.jpg"},
+rasam:{cal:60,protein:2,img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Rasam.jpg"},
+sambar:{cal:90,protein:5,img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Sambar.jpg"},
+pongal:{cal:180,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/e/e3/Ven_Pongal.jpg"},
+upma:{cal:120,protein:3,img:"https://upload.wikimedia.org/wikipedia/commons/8/8f/Upma.jpg"},
+vada:{cal:150,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/7/7b/Vada.jpg"},
+poha:{cal:180,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/5/55/Poha.jpg"},
+chapati:{cal:104,protein:3,img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Chapati.jpg"},
+naan:{cal:260,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/9/9c/Naan.jpg"},
 
-};
+parotta:{cal:300,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/4/49/Parotta.jpg"},
+poori:{cal:250,protein:5,img:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Poori.jpg"},
+veg_biryani:{cal:250,protein:7,img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Vegetable_Biryani.jpg"},
+chicken_biryani:{cal:290,protein:15,img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Chicken_Biryani.jpg"},
+mutton_biryani:{cal:320,protein:18,img:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Mutton_Biryani.jpg"},
+pulao:{cal:220,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/3/35/Pulao.jpg"},
+lemon_rice:{cal:200,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/Lemon_rice.jpg"},
+curd_rice:{cal:180,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/4/45/Curd_Rice.jpg"},
+tamarind_rice:{cal:210,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Puliyodarai.jpg"},
+rajma:{cal:240,protein:9,img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Rajma_Chawal.jpg"},
 
-function analyze(){
+dal_tadka:{cal:180,protein:8,img:"https://upload.wikimedia.org/wikipedia/commons/4/4c/Dal_Tadka.jpg"},
+dal_makhani:{cal:300,protein:10,img:"https://upload.wikimedia.org/wikipedia/commons/6/6c/Dal_Makhani.jpg"},
+palak_paneer:{cal:280,protein:11,img:"https://upload.wikimedia.org/wikipedia/commons/a/a1/Palak_Paneer.jpg"},
+paneer_butter_masala:{cal:300,protein:10,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Paneer_Butter_Masala.jpg"},
+aloo_paratha:{cal:260,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/6/6a/Aloo_Paratha.jpg"},
+gobi_paratha:{cal:240,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/0/0e/Gobi_Paratha.jpg"},
+paneer_paratha:{cal:280,protein:9,img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Paneer_Paratha.jpg"},
+veg_samosa:{cal:262,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Samosa.jpg"},
+pakora:{cal:220,protein:5,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Pakora.jpg"},
+pav_bhaji:{cal:400,protein:10,img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/Pav_Bhaji.jpg"},
 
-let f=document.getElementById("foodName").value.toLowerCase().replace(/ /g,"_");
+vada_pav:{cal:300,protein:8,img:"https://upload.wikimedia.org/wikipedia/commons/2/2a/Vada_Pav.jpg"},
+misal_pav:{cal:350,protein:12,img:"https://upload.wikimedia.org/wikipedia/commons/3/3f/Misal_Pav.jpg"},
+dhokla:{cal:160,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Dhokla.jpg"},
+thepla:{cal:200,protein:5,img:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Thepla.jpg"},
+khichdi:{cal:180,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/4/49/Khichdi.jpg"},
+jalebi:{cal:300,protein:2,img:"https://upload.wikimedia.org/wikipedia/commons/6/6f/Jalebi.jpg"},
+gulab_jamun:{cal:350,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/4/4e/Gulab_Jamun.jpg"},
+rasgulla:{cal:186,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/0/0d/Rasgulla.jpg"},
+kheer:{cal:250,protein:6,img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/Kheer.jpg"},
+laddu:{cal:280,protein:5,img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Laddu.jpg"},
 
-if(!foods[f]){
-
-document.getElementById("result").innerHTML="<h3>Food not found in dataset</h3>";
-return;
-
-}
-
-let cal=foods[f].cal;
-let protein=foods[f].protein;
-
-let category="";
-let suggestion="";
-let tip="";
-
-if(cal<150){
-
-category="Healthy Food";
-suggestion="Good for diet";
-tip="Eat with vegetables";
-
-}
-
-else if(cal<280){
-
-category="Moderate Food";
-suggestion="Eat balanced diet";
-tip="Drink more water";
-
-}
-
-else{
-
-category="High Calorie Food";
-suggestion="Eat occasionally";
-tip="Do exercise regularly";
-
-}
-
-/* AUTOMATIC FOOD IMAGE */
-
-let img="https://source.unsplash.com/500x350/?"+f+",indian-food";
-
-document.getElementById("result").innerHTML=
-
-"<h2>"+f.replace(/_/g," ")+"</h2>"+
-"<img src='"+img+"'>"+
-"<p><b>Calories:</b> "+cal+" kcal</p>"+
-"<p><b>Protein:</b> "+protein+" g</p>"+
-"<p><b>Category:</b> "+category+"</p>"+
-"<p><b>Suggestion:</b> "+suggestion+"</p>"+
-"<p><b>Health Tip:</b> "+tip+"</p>";
-
-}
-
-</script>
-
-</body>
-</html>
+mysore_pak:{cal:300,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/6/63/Mysore_Pak.jpg"},
+halwa:{cal:290,protein:4,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Halwa.jpg"},
+chole_bhature:{cal:350,protein:12,img:"https://upload.wikimedia.org/wikipedia/commons/8/89/Chole_Bhature.jpg"},
+butter_chicken:{cal:300,protein:20,img:"https://upload.wikimedia.org/wikipedia/commons/7/7e/Butter_Chicken.jpg"},
+tandoori_chicken:{cal:220,protein:25,img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Tandoori_Chicken.jpg"},
+fish_curry:{cal:200,protein:22,img:"https://upload.wikimedia.org/wikipedia/commons/4/
