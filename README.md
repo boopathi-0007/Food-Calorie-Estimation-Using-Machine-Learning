@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>Indian Food Nutrition Analyzer</title>
@@ -9,6 +10,8 @@
 body{
 font-family:Arial;
 margin:0;
+text-align:center;
+background:#f5f5f5;
 }
 
 #loginPage{
@@ -24,19 +27,18 @@ background-size:cover;
 background:white;
 padding:30px;
 border-radius:10px;
-text-align:center;
 }
 
 #mainPage{
 display:none;
-text-align:center;
 padding:30px;
 }
 
 img{
-width:260px;
+width:280px;
 margin-top:20px;
 border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
 }
 
 button{
@@ -45,11 +47,17 @@ background:green;
 color:white;
 border:none;
 cursor:pointer;
+font-size:16px;
 }
 
 input{
 padding:10px;
-width:220px;
+width:230px;
+}
+
+#result{
+margin-top:20px;
+font-size:18px;
 }
 
 </style>
@@ -64,14 +72,15 @@ width:220px;
 
 <h2>Login</h2>
 
-<input type="text"><br><br>
-<input type="password"><br><br>
+<input type="text" placeholder="Username"><br><br>
+<input type="password" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
 
 </div>
 
 </div>
+
 
 <div id="mainPage">
 
@@ -87,11 +96,14 @@ width:220px;
 
 </div>
 
+
 <script>
 
 function login(){
+
 document.getElementById("loginPage").style.display="none";
 document.getElementById("mainPage").style.display="block";
+
 }
 
 let foods={
@@ -137,11 +149,13 @@ gulab_jamun:{cal:350,protein:4}
 
 function analyze(){
 
-let f=document.getElementById("foodName").value.toLowerCase();
+let f=document.getElementById("foodName").value.toLowerCase().replace(/ /g,"_");
 
 if(!foods[f]){
-document.getElementById("result").innerHTML="Food not in dataset";
+
+document.getElementById("result").innerHTML="<h3>Food not found in dataset</h3>";
 return;
+
 }
 
 let cal=foods[f].cal;
@@ -152,34 +166,42 @@ let suggestion="";
 let tip="";
 
 if(cal<150){
+
 category="Healthy Food";
 suggestion="Good for diet";
 tip="Eat with vegetables";
+
 }
+
 else if(cal<280){
+
 category="Moderate Food";
 suggestion="Eat balanced diet";
 tip="Drink more water";
+
 }
+
 else{
+
 category="High Calorie Food";
 suggestion="Eat occasionally";
 tip="Do exercise regularly";
+
 }
 
-/* IMAGE LINK */
+/* AUTOMATIC FOOD IMAGE */
 
-let img="https://source.unsplash.com/400x300/?indian,"+f;
+let img="https://source.unsplash.com/500x350/?"+f+",indian-food";
 
 document.getElementById("result").innerHTML=
 
-"<h2>"+f+"</h2>"+
+"<h2>"+f.replace(/_/g," ")+"</h2>"+
 "<img src='"+img+"'>"+
-"<p>Calories : "+cal+" kcal</p>"+
-"<p>Protein : "+protein+" g</p>"+
-"<p>Category : "+category+"</p>"+
-"<p>Suggestion : "+suggestion+"</p>"+
-"<p>Health Tip : "+tip+"</p>";
+"<p><b>Calories:</b> "+cal+" kcal</p>"+
+"<p><b>Protein:</b> "+protein+" g</p>"+
+"<p><b>Category:</b> "+category+"</p>"+
+"<p><b>Suggestion:</b> "+suggestion+"</p>"+
+"<p><b>Health Tip:</b> "+tip+"</p>";
 
 }
 
