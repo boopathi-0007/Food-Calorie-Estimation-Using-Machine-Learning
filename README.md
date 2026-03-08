@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
-<title>Food Calorie Estimation Using ML</title>
+<title>Food Calorie Estimation</title>
 
 <style>
 
@@ -40,7 +39,6 @@ padding:10px 20px;
 background:green;
 color:white;
 border:none;
-margin-top:10px;
 cursor:pointer;
 }
 
@@ -66,7 +64,7 @@ border-radius:10px;
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 
 <div id="loginPage">
 
@@ -74,8 +72,8 @@ border-radius:10px;
 
 <h2>Login</h2>
 
-<input type="text" id="username" placeholder="Username"><br><br>
-<input type="password" id="password" placeholder="Password"><br><br>
+<input type="text" id="user" placeholder="Username"><br><br>
+<input type="password" id="pass" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
 
@@ -83,13 +81,14 @@ border-radius:10px;
 
 </div>
 
-<!-- MAIN PAGE -->
+
+<!-- MAIN -->
 
 <div id="mainPage">
 
 <h1>Indian Food Nutrition Analyzer</h1>
 
-<input type="text" id="foodName" placeholder="Example: dosa">
+<input type="text" id="foodName" placeholder="Example: biryani">
 
 <br><br>
 
@@ -99,16 +98,17 @@ border-radius:10px;
 
 </div>
 
+
 <script>
 
-/* LOGIN FUNCTION */
+/* LOGIN */
 
 function login(){
 
-let user=document.getElementById("username").value;
-let pass=document.getElementById("password").value;
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
 
-if(user=="admin" && pass=="1234"){
+if(u=="admin" && p=="1234"){
 
 document.getElementById("loginPage").style.display="none";
 document.getElementById("mainPage").style.display="block";
@@ -122,24 +122,48 @@ alert("Invalid Login");
 
 }
 
-/* FOOD DATASET */
+
+/* DATASET 30 FOODS */
 
 let foods={
 
-idli:{cal:58,protein:2,img:"https://images.unsplash.com/photo-1589301760014-d929f3979dbc"},
-dosa:{cal:133,protein:3,img:"https://images.unsplash.com/photo-1630409351217-bc4fa6422075"},
-rasam:{cal:60,protein:2,img:"https://images.unsplash.com/photo-1604908176997-431c16c0f5fa"},
-sambar:{cal:90,protein:5,img:"https://images.unsplash.com/photo-1604909052743-94e838986d24"},
-pongal:{cal:180,protein:6,img:"https://images.unsplash.com/photo-1589302168068-964664d93dc0"},
-poha:{cal:180,protein:4,img:"https://images.unsplash.com/photo-1604908812834-5c9f4c7c9f6f"},
-chapati:{cal:104,protein:3,img:"https://images.unsplash.com/photo-1617191519000-3f6f7b3c6c13"},
-biryani:{cal:290,protein:15,img:"https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a"},
-jalebi:{cal:300,protein:2,img:"https://images.unsplash.com/photo-1601050690597-df0568f70950"},
-gulab_jamun:{cal:350,protein:4,img:"https://images.unsplash.com/photo-1603532648955-039310d9ed75"}
+biryani:{cal:290,protein:15,img:"https://source.unsplash.com/400x300/?biryani"},
+dosa:{cal:133,protein:3,img:"https://source.unsplash.com/400x300/?dosa"},
+idli:{cal:58,protein:2,img:"https://source.unsplash.com/400x300/?idli"},
+sambar:{cal:90,protein:5,img:"https://source.unsplash.com/400x300/?sambar"},
+rasam:{cal:60,protein:2,img:"https://source.unsplash.com/400x300/?rasam"},
+pongal:{cal:180,protein:6,img:"https://source.unsplash.com/400x300/?pongal"},
+upma:{cal:120,protein:3,img:"https://source.unsplash.com/400x300/?upma"},
+poha:{cal:180,protein:4,img:"https://source.unsplash.com/400x300/?poha"},
+chapati:{cal:104,protein:3,img:"https://source.unsplash.com/400x300/?chapati"},
+naan:{cal:260,protein:6,img:"https://source.unsplash.com/400x300/?naan"},
+
+parotta:{cal:300,protein:6,img:"https://source.unsplash.com/400x300/?parotta"},
+poori:{cal:250,protein:5,img:"https://source.unsplash.com/400x300/?poori"},
+veg_biryani:{cal:250,protein:7,img:"https://source.unsplash.com/400x300/?veg-biryani"},
+chicken_biryani:{cal:290,protein:15,img:"https://source.unsplash.com/400x300/?chicken-biryani"},
+pulao:{cal:220,protein:6,img:"https://source.unsplash.com/400x300/?pulao"},
+lemon_rice:{cal:200,protein:4,img:"https://source.unsplash.com/400x300/?lemon-rice"},
+curd_rice:{cal:180,protein:6,img:"https://source.unsplash.com/400x300/?curd-rice"},
+rajma:{cal:240,protein:9,img:"https://source.unsplash.com/400x300/?rajma"},
+dal:{cal:180,protein:8,img:"https://source.unsplash.com/400x300/?dal"},
+paneer:{cal:300,protein:10,img:"https://source.unsplash.com/400x300/?paneer"},
+
+samosa:{cal:262,protein:6,img:"https://source.unsplash.com/400x300/?samosa"},
+pakora:{cal:220,protein:5,img:"https://source.unsplash.com/400x300/?pakora"},
+pav_bhaji:{cal:400,protein:10,img:"https://source.unsplash.com/400x300/?pav-bhaji"},
+vada_pav:{cal:300,protein:8,img:"https://source.unsplash.com/400x300/?vada-pav"},
+dhokla:{cal:160,protein:6,img:"https://source.unsplash.com/400x300/?dhokla"},
+khichdi:{cal:180,protein:6,img:"https://source.unsplash.com/400x300/?khichdi"},
+jalebi:{cal:300,protein:2,img:"https://source.unsplash.com/400x300/?jalebi"},
+gulab_jamun:{cal:350,protein:4,img:"https://source.unsplash.com/400x300/?gulab-jamun"},
+kheer:{cal:250,protein:6,img:"https://source.unsplash.com/400x300/?kheer"},
+laddu:{cal:280,protein:5,img:"https://source.unsplash.com/400x300/?laddu"}
 
 };
 
-/* ANALYZE FUNCTION */
+
+/* ANALYZE */
 
 function analyze(){
 
@@ -147,7 +171,7 @@ let f=document.getElementById("foodName").value.toLowerCase();
 
 if(!foods[f]){
 
-document.getElementById("result").innerHTML="<h3>Food not found in dataset</h3>";
+document.getElementById("result").innerHTML="<h3>Food not found</h3>";
 return;
 
 }
@@ -158,23 +182,27 @@ let img=foods[f].img;
 
 let category="";
 let suggestion="";
+let tip="";
 
 if(cal<150){
 
 category="Healthy Food";
 suggestion="Good for diet";
+tip="Eat more vegetables";
 
 }
 else if(cal<280){
 
 category="Moderate Food";
 suggestion="Eat balanced diet";
+tip="Drink more water";
 
 }
 else{
 
 category="High Calorie Food";
 suggestion="Eat occasionally";
+tip="Do exercise regularly";
 
 }
 
@@ -182,10 +210,11 @@ document.getElementById("result").innerHTML=
 
 "<h2>"+f+"</h2>"+
 "<img src='"+img+"'>"+
-"<p>Calories: "+cal+" kcal</p>"+
-"<p>Protein: "+protein+" g</p>"+
-"<p>Category: "+category+"</p>"+
-"<p>Suggestion: "+suggestion+"</p>";
+"<p><b>Calories:</b> "+cal+" kcal</p>"+
+"<p><b>Protein:</b> "+protein+" g</p>"+
+"<p><b>Category:</b> "+category+"</p>"+
+"<p><b>Suggestion:</b> "+suggestion+"</p>"+
+"<p><b>Health Tip:</b> "+tip+"</p>";
 
 }
 
