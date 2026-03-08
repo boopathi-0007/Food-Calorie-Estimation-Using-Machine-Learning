@@ -49,6 +49,7 @@ color:white;
 border:none;
 cursor:pointer;
 border-radius:5px;
+margin:5px;
 }
 
 /* MAIN PAGE */
@@ -137,10 +138,9 @@ border-radius:10px;
 <h1>Indian Food Nutrition Analyzer</h1>
 
 <button onclick="darkMode()">🌙 Dark Mode</button>
+<button onclick="logout()">Logout</button>
 
 <br><br>
-
-<!-- FOOD SEARCH -->
 
 <input list="foodList" id="foodName" placeholder="Search Food">
 
@@ -150,15 +150,11 @@ border-radius:10px;
 
 <button onclick="analyze()">Analyze Food</button>
 
-<!-- FOOD RESULT -->
-
 <div id="result"></div>
 
 <canvas id="chart"></canvas>
 
 <br><br>
-
-<!-- BMI CALCULATOR AFTER FOOD RESULT -->
 
 <h3>BMI Calculator</h3>
 
@@ -194,15 +190,22 @@ alert("Enter username and password")
 
 }
 
-/* DARK MODE */
+/* LOGOUT */
 
-function darkMode(){
+function logout(){
 
-document.body.classList.toggle("dark")
+document.getElementById("mainPage").style.display="none"
+document.getElementById("loginPage").style.display="flex"
 
 }
 
-/* FOOD DATASET */
+/* DARK MODE */
+
+function darkMode(){
+document.body.classList.toggle("dark")
+}
+
+/* FOOD DATA */
 
 let foods={
 
@@ -217,49 +220,21 @@ let foods={
 "curd rice":{cal:180,protein:6},
 "lemon rice":{cal:200,protein:4},
 
-"tamarind rice":{cal:210,protein:4},
 "veg biryani":{cal:250,protein:7},
 "chicken biryani":{cal:290,protein:15},
 "mutton biryani":{cal:320,protein:18},
 "chapati":{cal:104,protein:3},
 "parotta":{cal:300,protein:6},
 "poori":{cal:250,protein:5},
-"naan":{cal:260,protein:6},
+
 "paneer butter masala":{cal:300,protein:10},
 "palak paneer":{cal:280,protein:11},
-
 "rajma":{cal:240,protein:9},
 "dal tadka":{cal:180,protein:8},
-"dal makhani":{cal:300,protein:10},
-"aloo paratha":{cal:260,protein:6},
-"gobi paratha":{cal:240,protein:6},
-"paneer paratha":{cal:280,protein:9},
-"veg samosa":{cal:262,protein:6},
-"pakora":{cal:220,protein:5},
-"pav bhaji":{cal:400,protein:10},
-"vada pav":{cal:300,protein:8},
 
-"misal pav":{cal:350,protein:12},
-"dhokla":{cal:160,protein:6},
-"thepla":{cal:200,protein:5},
-"khichdi":{cal:180,protein:6},
-"poha":{cal:180,protein:4},
-"jalebi":{cal:300,protein:2},
-"gulab jamun":{cal:350,protein:4},
-"kheer":{cal:220,protein:6},
-"ladoo":{cal:300,protein:5},
-"halwa":{cal:250,protein:4},
-
-"butter chicken":{cal:490,protein:25},
-"tandoori chicken":{cal:300,protein:35},
-"egg curry":{cal:180,protein:12},
 "omelette":{cal:155,protein:11},
 "boiled egg":{cal:78,protein:6},
-"fish curry":{cal:220,protein:20},
-"pani puri":{cal:180,protein:4},
-"bhel puri":{cal:170,protein:5},
-"sev puri":{cal:200,protein:5},
-"kathi roll":{cal:330,protein:12}
+"fish curry":{cal:220,protein:20}
 
 }
 
@@ -275,7 +250,7 @@ list.appendChild(option)
 
 }
 
-/* FOOD ANALYZER */
+/* FOOD ANALYSIS */
 
 function analyze(){
 
@@ -344,17 +319,17 @@ if(b<18.5){
 status="Underweight"
 suggestion="Increase calorie intake. Eat rice, milk, eggs, banana and nuts."
 }
-else if(b>=18.5 && b<25){
+else if(b<25){
 status="Normal Weight"
 suggestion="Maintain balanced diet and regular exercise."
 }
-else if(b>=25 && b<30){
+else if(b<30){
 status="Overweight"
 suggestion="Reduce oily foods and sweets. Eat vegetables and exercise."
 }
 else{
 status="Obese"
-suggestion="Avoid junk food and high calorie foods. Follow strict healthy diet."
+suggestion="Avoid junk food and follow strict healthy diet."
 }
 
 document.getElementById("bmiResult").innerHTML=
