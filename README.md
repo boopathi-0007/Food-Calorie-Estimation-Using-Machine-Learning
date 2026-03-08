@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Indian Food Nutrition Analyzer</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,7 +10,8 @@
 body{
 font-family:Arial;
 margin:0;
-background:#f5f5f5;
+background:#f2f2f2;
+transition:0.4s;
 }
 
 /* LOGIN PAGE */
@@ -21,7 +21,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background-image:url("https://images.unsplash.com/photo-1504674900247-0877df9cc836");
+background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
 }
 
@@ -30,13 +30,11 @@ background:white;
 padding:30px;
 border-radius:10px;
 text-align:center;
-width:250px;
 }
 
-input{
+.loginBox input{
 padding:10px;
 width:200px;
-margin:5px;
 }
 
 button{
@@ -47,25 +45,43 @@ border:none;
 cursor:pointer;
 }
 
+/* MAIN PAGE */
+
 #mainPage{
 display:none;
+padding:20px;
 text-align:center;
-padding:30px;
-min-height:100vh;
 }
 
+/* DARK MODE */
+
 .dark{
-background:#111;
+background:#121212;
 color:white;
 }
 
+.dark input{
+background:#333;
+color:white;
+}
+
+.dark button{
+background:#444;
+}
+
+/* RESULT */
+
+#result{
+margin-top:20px;
+font-size:18px;
+}
+
 canvas{
-max-width:500px;
+max-width:400px;
 margin:auto;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -78,8 +94,8 @@ margin:auto;
 
 <h2>Login</h2>
 
-<input type="text" id="username" placeholder="Username"><br>
-<input type="password" id="password" placeholder="Password"><br>
+<input id="user" placeholder="Username"><br><br>
+<input id="pass" type="password" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
 
@@ -93,11 +109,11 @@ margin:auto;
 
 <h1>Indian Food Nutrition Analyzer</h1>
 
-<button onclick="toggleDark()">🌙 Dark Mode</button>
+<button onclick="darkMode()">🌙 Dark Mode</button>
 
-<h3>Search Food</h3>
+<br><br>
 
-<input list="foodList" id="foodInput" placeholder="Type food name">
+<input list="foodList" id="foodName" placeholder="Search Food">
 
 <datalist id="foodList"></datalist>
 
@@ -105,82 +121,106 @@ margin:auto;
 
 <button onclick="analyze()">Analyze Food</button>
 
-<div id="result"></div>
-
-<h3>Nutrition Chart</h3>
-
-<canvas id="chart"></canvas>
-
-<hr>
-
-<h2>BMI Calculator</h2>
-
-<input id="weight" placeholder="Weight (kg)">
-<br>
-<input id="height" placeholder="Height (cm)">
 <br><br>
 
-<button onclick="calculateBMI()">Calculate BMI</button>
+<h3>BMI Calculator</h3>
+
+<input id="height" placeholder="Height cm">
+<input id="weight" placeholder="Weight kg">
+
+<button onclick="bmi()">Check BMI</button>
 
 <div id="bmiResult"></div>
 
-<div id="recommend"></div>
+<div id="result"></div>
+
+<canvas id="chart"></canvas>
 
 </div>
 
-
 <script>
 
-/* LOGIN FUNCTION */
+/* LOGIN */
 
 function login(){
 
-let user=document.getElementById("username").value
-let pass=document.getElementById("password").value
+let u=document.getElementById("user").value
+let p=document.getElementById("pass").value
 
-if(user==="admin" && pass==="1234"){
-
+if(u!="" && p!=""){
 document.getElementById("loginPage").style.display="none"
 document.getElementById("mainPage").style.display="block"
-
-}else{
-
-alert("Invalid Login")
-
+}
+else{
+alert("Enter username and password")
 }
 
 }
 
 /* DARK MODE */
 
-function toggleDark(){
+function darkMode(){
 document.body.classList.toggle("dark")
 }
 
-/* FOOD DATASET */
+/* DATASET */
 
 let foods={
 
-biryani:{cal:290,protein:15},
-dosa:{cal:133,protein:3},
-idli:{cal:58,protein:2},
-sambar:{cal:90,protein:5},
-rasam:{cal:60,protein:2},
-pongal:{cal:180,protein:6},
-upma:{cal:120,protein:3},
-poha:{cal:180,protein:4},
-chapati:{cal:104,protein:3},
-naan:{cal:260,protein:6},
-parotta:{cal:300,protein:6},
-poori:{cal:250,protein:5},
-pulao:{cal:220,protein:6},
-lemon_rice:{cal:200,protein:4},
-curd_rice:{cal:180,protein:6},
-rajma:{cal:240,protein:9},
-dal:{cal:180,protein:8},
-paneer:{cal:300,protein:10},
-samosa:{cal:262,protein:6},
-pakora:{cal:220,protein:5}
+"idli":{cal:58,protein:2},
+"dosa":{cal:133,protein:3},
+"masala dosa":{cal:230,protein:5},
+"pongal":{cal:180,protein:6},
+"upma":{cal:120,protein:3},
+"vada":{cal:150,protein:4},
+"sambar":{cal:90,protein:5},
+"rasam":{cal:60,protein:2},
+"curd rice":{cal:180,protein:6},
+"lemon rice":{cal:200,protein:4},
+
+"tamarind rice":{cal:210,protein:4},
+"veg biryani":{cal:250,protein:7},
+"chicken biryani":{cal:290,protein:15},
+"mutton biryani":{cal:320,protein:18},
+"chapati":{cal:104,protein:3},
+"parotta":{cal:300,protein:6},
+"poori":{cal:250,protein:5},
+"naan":{cal:260,protein:6},
+"paneer butter masala":{cal:300,protein:10},
+"palak paneer":{cal:280,protein:11},
+
+"rajma":{cal:240,protein:9},
+"dal tadka":{cal:180,protein:8},
+"dal makhani":{cal:300,protein:10},
+"aloo paratha":{cal:260,protein:6},
+"gobi paratha":{cal:240,protein:6},
+"paneer paratha":{cal:280,protein:9},
+"veg samosa":{cal:262,protein:6},
+"pakora":{cal:220,protein:5},
+"pav bhaji":{cal:400,protein:10},
+"vada pav":{cal:300,protein:8},
+
+"misal pav":{cal:350,protein:12},
+"dhokla":{cal:160,protein:6},
+"thepla":{cal:200,protein:5},
+"khichdi":{cal:180,protein:6},
+"poha":{cal:180,protein:4},
+"jalebi":{cal:300,protein:2},
+"gulab jamun":{cal:350,protein:4},
+"kheer":{cal:220,protein:6},
+"ladoo":{cal:300,protein:5},
+"halwa":{cal:250,protein:4},
+
+"butter chicken":{cal:490,protein:25},
+"tandoori chicken":{cal:300,protein:35},
+"egg curry":{cal:180,protein:12},
+"omelette":{cal:155,protein:11},
+"boiled egg":{cal:78,protein:6},
+"fish curry":{cal:220,protein:20},
+"pani puri":{cal:180,protein:4},
+"bhel puri":{cal:170,protein:5},
+"sev puri":{cal:200,protein:5},
+"kathi roll":{cal:330,protein:12}
 
 }
 
@@ -196,13 +236,11 @@ list.appendChild(option)
 
 }
 
-/* CHART */
-
-let chart
+/* ANALYZE FOOD */
 
 function analyze(){
 
-let f=document.getElementById("foodInput").value
+let f=document.getElementById("foodName").value.toLowerCase()
 
 if(!foods[f]){
 document.getElementById("result").innerHTML="Food not found"
@@ -212,24 +250,44 @@ return
 let cal=foods[f].cal
 let protein=foods[f].protein
 
+let recommendation=""
+
+if(cal<150){
+recommendation="Good for weight loss"
+}
+else if(cal<300){
+recommendation="Eat in moderation"
+}
+else{
+recommendation="High calorie food"
+}
+
 document.getElementById("result").innerHTML=
 
-"<h3>"+f+"</h3>"+
-"Calories: "+cal+" kcal<br>"+
-"Protein: "+protein+" g"
+"<h2>"+f+"</h2>"+
+"<p>Calories : "+cal+" kcal</p>"+
+"<p>Protein : "+protein+" g</p>"+
+"<p>AI Recommendation : "+recommendation+"</p>"
 
-if(chart){chart.destroy()}
+/* GRAPH */
 
-chart=new Chart(document.getElementById("chart"),{
+let ctx=document.getElementById("chart")
 
-type:"bar",
+new Chart(ctx,{
+
+type:'bar',
 
 data:{
-labels:["Calories","Protein"],
+labels:['Calories','Protein'],
+
 datasets:[{
+
 label:f,
+
 data:[cal,protein]
+
 }]
+
 }
 
 })
@@ -238,44 +296,28 @@ data:[cal,protein]
 
 /* BMI */
 
-function calculateBMI(){
+function bmi(){
 
-let w=document.getElementById("weight").value
 let h=document.getElementById("height").value/100
+let w=document.getElementById("weight").value
 
-let bmi=(w/(h*h)).toFixed(1)
+let b=w/(h*h)
 
-let msg=""
-let rec=""
+let suggestion=""
 
-if(bmi<18.5){
-
-msg="Underweight"
-rec="Eat milk, banana, paneer"
-
+if(b<18.5){
+suggestion="Eat high calorie foods"
 }
-else if(bmi<25){
-
-msg="Normal"
-rec="Maintain balanced diet"
-
-}
-else if(bmi<30){
-
-msg="Overweight"
-rec="Eat salad, idli, soup"
-
+else if(b<25){
+suggestion="Maintain current diet"
 }
 else{
-
-msg="Obese"
-rec="Reduce calories, eat vegetables"
-
+suggestion="Reduce oily foods"
 }
 
-document.getElementById("bmiResult").innerHTML="BMI: "+bmi+" ("+msg+")"
+document.getElementById("bmiResult").innerHTML=
 
-document.getElementById("recommend").innerHTML=rec
+"BMI : "+b.toFixed(2)+"<br>Diet Suggestion : "+suggestion
 
 }
 
