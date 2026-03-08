@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title> Food Nutrition Analyzer using ML</title>
+<title>Indian Food Nutrition Analyzer</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -25,11 +25,14 @@ background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
 }
 
+/* LOGIN BOX */
+
 .loginBox{
 background:white;
 padding:30px;
 border-radius:10px;
 text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
 }
 
 .loginBox input{
@@ -37,20 +40,27 @@ padding:10px;
 width:200px;
 }
 
+/* BUTTON */
+
 button{
 padding:10px 20px;
 background:green;
 color:white;
 border:none;
 cursor:pointer;
+border-radius:5px;
 }
 
-/* MAIN PAGE */
+/* MAIN PAGE WITH BACKGROUND */
 
 #mainPage{
 display:none;
 padding:20px;
 text-align:center;
+min-height:100vh;
+background:url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
+background-size:cover;
+background-position:center;
 }
 
 /* DARK MODE */
@@ -69,16 +79,34 @@ color:white;
 background:#444;
 }
 
-/* RESULT */
+/* RESULT BOX */
 
 #result{
 margin-top:20px;
 font-size:18px;
+background:rgba(255,255,255,0.85);
+padding:15px;
+border-radius:10px;
+display:inline-block;
 }
+
+#bmiResult{
+margin-top:20px;
+background:rgba(255,255,255,0.85);
+padding:10px;
+border-radius:10px;
+display:inline-block;
+}
+
+/* CHART */
 
 canvas{
 max-width:400px;
 margin:auto;
+margin-top:20px;
+background:white;
+padding:10px;
+border-radius:10px;
 }
 
 </style>
@@ -171,7 +199,7 @@ document.body.classList.toggle("dark")
 
 }
 
-/* DATASET */
+/* FOOD DATASET */
 
 let foods={
 
@@ -244,7 +272,7 @@ list.appendChild(option)
 
 }
 
-/* ANALYZE FOOD */
+/* FOOD ANALYSIS */
 
 function analyze(){
 
@@ -292,7 +320,7 @@ data:[cal,protein]
 
 }
 
-/* BMI CALCULATOR (UPDATED) */
+/* BMI CALCULATOR */
 
 function bmi(){
 
@@ -310,31 +338,20 @@ let status=""
 let suggestion=""
 
 if(b<18.5){
-
 status="Underweight"
 suggestion="Increase calorie intake. Eat rice, milk, eggs, banana and nuts."
-
 }
-
 else if(b>=18.5 && b<25){
-
 status="Normal Weight"
 suggestion="Maintain balanced diet and regular exercise."
-
 }
-
 else if(b>=25 && b<30){
-
 status="Overweight"
-suggestion="Reduce oily foods and sweets. Eat more vegetables and exercise regularly."
-
+suggestion="Reduce oily foods and sweets. Eat more vegetables and exercise."
 }
-
 else{
-
 status="Obese"
 suggestion="Avoid junk food and high calorie foods. Follow a strict healthy diet."
-
 }
 
 document.getElementById("bmiResult").innerHTML=
