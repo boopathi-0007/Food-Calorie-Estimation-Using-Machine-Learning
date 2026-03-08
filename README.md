@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Indian Food Nutrition Analyzer</title>
+<title> Food Nutrition Analyzer using ML</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
