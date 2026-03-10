@@ -25,8 +25,6 @@ background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
 background-size:cover;
 }
 
-/* LOGIN BOX */
-
 .loginBox{
 background:white;
 padding:30px;
@@ -82,19 +80,11 @@ background:#444;
 
 /* RESULT */
 
-#result{
+#result,#bmiResult{
 margin-top:20px;
 font-size:18px;
 background:rgba(255,255,255,0.85);
 padding:15px;
-border-radius:10px;
-display:inline-block;
-}
-
-#bmiResult{
-margin-top:20px;
-background:rgba(255,255,255,0.85);
-padding:10px;
 border-radius:10px;
 display:inline-block;
 }
@@ -113,22 +103,19 @@ border-radius:10px;
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 
 <div id="loginPage">
-
 <div class="loginBox">
 
 <h2>Login</h2>
 
 <input id="user" placeholder="Username"><br><br>
-
 <input id="pass" type="password" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
 
 </div>
-
 </div>
 
 <!-- MAIN PAGE -->
@@ -142,6 +129,21 @@ border-radius:10px;
 
 <br><br>
 
+<!-- BMI FIRST -->
+
+<h3>BMI Calculator</h3>
+
+<input id="height" placeholder="Height cm">
+<input id="weight" placeholder="Weight kg">
+
+<button onclick="bmi()">Check BMI</button>
+
+<div id="bmiResult"></div>
+
+<br><br>
+
+<h3>Food Nutrition Analysis</h3>
+
 <input list="foodList" id="foodName" placeholder="Search Food">
 
 <datalist id="foodList"></datalist>
@@ -153,17 +155,6 @@ border-radius:10px;
 <div id="result"></div>
 
 <canvas id="chart"></canvas>
-
-<br><br>
-
-<h3>BMI Calculator</h3>
-
-<input id="height" placeholder="Height cm">
-<input id="weight" placeholder="Weight kg">
-
-<button onclick="bmi()">Check BMI</button>
-
-<div id="bmiResult"></div>
 
 </div>
 
@@ -183,9 +174,7 @@ document.getElementById("mainPage").style.display="block"
 
 }
 else{
-
 alert("Enter username and password")
-
 }
 
 }
@@ -193,10 +182,8 @@ alert("Enter username and password")
 /* LOGOUT */
 
 function logout(){
-
 document.getElementById("mainPage").style.display="none"
 document.getElementById("loginPage").style.display="flex"
-
 }
 
 /* DARK MODE */
@@ -250,55 +237,11 @@ list.appendChild(option)
 
 }
 
-/* FOOD ANALYSIS */
+/* GLOBAL BMI STATUS */
 
-function analyze(){
+let bmiStatus=""
 
-let f=document.getElementById("foodName").value.toLowerCase()
-
-if(!foods[f]){
-document.getElementById("result").innerHTML="Food not found"
-return
-}
-
-let cal=foods[f].cal
-let protein=foods[f].protein
-
-let recommendation=""
-
-if(cal<150){
-recommendation="Good for weight loss"
-}
-else if(cal<300){
-recommendation="Eat in moderation"
-}
-else{
-recommendation="High calorie food"
-}
-
-document.getElementById("result").innerHTML=
-
-"<h2>"+f+"</h2>"+
-"<p>Calories : "+cal+" kcal</p>"+
-"<p>Protein : "+protein+" g</p>"+
-"<p>AI Recommendation : "+recommendation+"</p>"
-
-let ctx=document.getElementById("chart")
-
-new Chart(ctx,{
-type:'bar',
-data:{
-labels:['Calories','Protein'],
-datasets:[{
-label:f,
-data:[cal,protein]
-}]
-}
-})
-
-}
-
-/* BMI */
+/* BMI FUNCTION */
 
 function bmi(){
 
@@ -312,31 +255,96 @@ return
 
 let b=w/(h*h)
 
-let status=""
-let suggestion=""
-
 if(b<18.5){
-status="Underweight"
-suggestion="Increase calorie intake. Eat rice, milk, eggs, banana and nuts."
+bmiStatus="underweight"
 }
 else if(b<25){
-status="Normal Weight"
-suggestion="Maintain balanced diet and regular exercise."
+bmiStatus="normal"
 }
 else if(b<30){
-status="Overweight"
-suggestion="Reduce oily foods and sweets. Eat vegetables and exercise."
+bmiStatus="overweight"
 }
 else{
-status="Obese"
-suggestion="Avoid junk food and follow strict healthy diet."
+bmiStatus="obese"
 }
 
 document.getElementById("bmiResult").innerHTML=
 
 "<h3>BMI : "+b.toFixed(2)+"</h3>"+
-"<p>Status : "+status+"</p>"+
-"<p>Diet Suggestion : "+suggestion+"</p>"
+"<p>Status : "+bmiStatus+"</p>"
+
+}
+
+/* FOOD ANALYSIS */
+
+function analyze(){
+
+if(bmiStatus==""){
+alert("Please calculate BMI first")
+return
+}
+
+let f=document.getElementById("foodName").value.toLowerCase()
+
+if(!foods[f]){
+document.getElementById("result").innerHTML="Food not found"
+return
+}
+
+let cal=foods[f].cal
+let protein=foods[f].protein
+
+let recommendation=""
+
+/* AI LOGIC */
+
+if(bmiStatus=="underweight"){
+
+if(cal>200){
+recommendation="Recommended for weight gain"
+}else{
+recommendation="You can eat but high calorie foods better"
+}
+
+}
+
+else if(bmiStatus=="normal"){
+
+recommendation="Safe to eat in moderation"
+
+}
+
+else if(bmiStatus=="overweight" || bmiStatus=="obese"){
+
+if(cal>200){
+recommendation="⚠ Not recommended for high weight"
+}else{
+recommendation="Better choice for weight control"
+}
+
+}
+
+document.getElementById("result").innerHTML=
+
+"<h2>"+f+"</h2>"+
+"<p>Calories : "+cal+" kcal</p>"+
+"<p>Protein : "+protein+" g</p>"+
+"<p>AI Recommendation : "+recommendation+"</p>"
+
+/* GRAPH */
+
+let ctx=document.getElementById("chart")
+
+new Chart(ctx,{
+type:'bar',
+data:{
+labels:['Calories','Protein'],
+datasets:[{
+label:f,
+data:[cal,protein]
+}]
+}
+})
 
 }
 
