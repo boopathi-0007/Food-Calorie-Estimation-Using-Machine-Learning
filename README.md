@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -13,7 +13,6 @@
 body{
 font-family:Arial;
 margin:0;
-background:#f2f2f2;
 }
 
 /* LOGIN PAGE */
@@ -23,8 +22,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061");
-background-size:cover;
+background:url("https://images.unsplash.com/photo-1490645935967-10de6ba17061") no-repeat center center/cover;
 }
 
 .loginBox{
@@ -40,16 +38,23 @@ padding:10px;
 width:200px;
 }
 
-/* MAIN PAGE */
+/* MAIN PAGE BACKGROUND IMAGE */
 
 #mainPage{
 display:none;
 text-align:center;
 padding:20px;
 min-height:100vh;
-background:url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
+
+/* IMAGE + DARK OVERLAY */
+
+background:
+linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)),
+url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
+
 background-size:cover;
 background-position:center;
+background-repeat:no-repeat;
 }
 
 /* TITLE */
@@ -59,14 +64,13 @@ font-size:36px;
 font-weight:bold;
 color:white;
 margin-bottom:20px;
-white-space:nowrap;
 }
 
 /* BUTTON */
 
 button{
 padding:10px 20px;
-background:green;
+background:#0a8f08;
 color:white;
 border:none;
 border-radius:5px;
@@ -75,14 +79,7 @@ margin:5px;
 font-size:16px;
 }
 
-/* DARK MODE */
-
-.dark{
-background:#121212;
-color:white;
-}
-
-/* RESULT */
+/* RESULT BOX */
 
 #result,#bmiResult{
 margin-top:20px;
@@ -93,6 +90,15 @@ display:inline-block;
 font-size:18px;
 }
 
+/* INPUT */
+
+input{
+padding:10px;
+margin:5px;
+}
+
+/* CHART */
+
 canvas{
 max-width:400px;
 margin-top:20px;
@@ -101,18 +107,13 @@ padding:10px;
 border-radius:10px;
 }
 
-input{
-padding:10px;
-margin:5px;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
 
 <div id="loginPage">
 
@@ -138,12 +139,11 @@ margin:5px;
 Food Nutrition Analyzer
 </div>
 
-<button onclick="darkMode()">🌙 Dark Mode</button>
 <button onclick="logout()">Logout</button>
 
 <br><br>
 
-<h3>BMI Calculator</h3>
+<h3 style="color:white">BMI Calculator</h3>
 
 <input id="height" placeholder="Height cm">
 <input id="weight" placeholder="Weight kg">
@@ -156,7 +156,7 @@ Food Nutrition Analyzer
 
 <br><br>
 
-<h3>Food Nutrition Analysis</h3>
+<h3 style="color:white">Food Nutrition Analysis</h3>
 
 <input list="foodList" id="foodName" placeholder="Search Food">
 
@@ -203,12 +203,6 @@ document.getElementById("loginPage").style.display="flex"
 
 }
 
-/* DARK MODE */
-
-function darkMode(){
-document.body.classList.toggle("dark")
-}
-
 /* FOOD DATA */
 
 let foods={
@@ -243,6 +237,8 @@ list.appendChild(option)
 
 }
 
+/* BMI */
+
 let bmiStatus=""
 
 function bmi(){
@@ -251,8 +247,10 @@ let h=document.getElementById("height").value/100
 let w=document.getElementById("weight").value
 
 if(h==0 || w==0){
+
 document.getElementById("bmiResult").innerHTML="Enter valid height and weight"
 return
+
 }
 
 let b=w/(h*h)
@@ -277,18 +275,24 @@ document.getElementById("bmiResult").innerHTML=
 
 }
 
+/* FOOD ANALYSIS */
+
 function analyze(){
 
 if(bmiStatus==""){
+
 alert("Please calculate BMI first")
 return
+
 }
 
 let f=document.getElementById("foodName").value.toLowerCase()
 
 if(!foods[f]){
+
 document.getElementById("result").innerHTML="Food not found"
 return
+
 }
 
 let cal=foods[f].cal
