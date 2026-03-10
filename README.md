@@ -3,7 +3,6 @@
 <head>
 
 <title>Food Nutrition Analyzer </title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
