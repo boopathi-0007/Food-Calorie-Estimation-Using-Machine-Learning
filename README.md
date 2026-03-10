@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Indian Food Nutrition Analyzer</title>
+
+<title>Food Nutrition Analyzer Using ML</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -11,7 +12,6 @@ body{
 font-family:Arial;
 margin:0;
 background:#f2f2f2;
-transition:0.4s;
 }
 
 /* LOGIN PAGE */
@@ -38,6 +38,26 @@ padding:10px;
 width:200px;
 }
 
+/* MAIN PAGE */
+
+#mainPage{
+display:none;
+text-align:center;
+padding:20px;
+min-height:100vh;
+background:url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
+background-size:cover;
+}
+
+/* TITLE */
+
+.title{
+font-size:40px;
+font-weight:bold;
+color:#111;
+margin-bottom:20px;
+}
+
 /* BUTTON */
 
 button{
@@ -45,21 +65,9 @@ padding:10px 20px;
 background:green;
 color:white;
 border:none;
-cursor:pointer;
 border-radius:5px;
+cursor:pointer;
 margin:5px;
-}
-
-/* MAIN PAGE */
-
-#mainPage{
-display:none;
-padding:20px;
-text-align:center;
-min-height:100vh;
-background:url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
-background-size:cover;
-background-position:center;
 }
 
 /* DARK MODE */
@@ -69,29 +77,23 @@ background:#121212;
 color:white;
 }
 
-.dark input{
-background:#333;
+.dark .title{
 color:white;
 }
 
-.dark button{
-background:#444;
-}
-
-/* RESULT */
+/* RESULT BOX */
 
 #result,#bmiResult{
 margin-top:20px;
-font-size:18px;
-background:rgba(255,255,255,0.85);
+background:rgba(255,255,255,0.9);
 padding:15px;
 border-radius:10px;
 display:inline-block;
+font-size:18px;
 }
 
 canvas{
 max-width:400px;
-margin:auto;
 margin-top:20px;
 background:white;
 padding:10px;
@@ -99,44 +101,48 @@ border-radius:10px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
 
 <div id="loginPage">
+
 <div class="loginBox">
 
 <h2>Login</h2>
 
 <input id="user" placeholder="Username"><br><br>
+
 <input id="pass" type="password" placeholder="Password"><br><br>
 
 <button onclick="login()">Login</button>
 
 </div>
+
 </div>
 
 <!-- MAIN PAGE -->
 
 <div id="mainPage">
 
-<h1>Indian Food Nutrition Analyzer</h1>
+<div class="title">
+Food Nutrition Analyzer Using ML
+</div>
 
 <button onclick="darkMode()">🌙 Dark Mode</button>
 <button onclick="logout()">Logout</button>
 
 <br><br>
 
-<!-- BMI FIRST -->
-
 <h3>BMI Calculator</h3>
 
 <input id="height" placeholder="Height cm">
 <input id="weight" placeholder="Weight kg">
 
-<button onclick="bmi()">Check BMI</button>
+<button onclick="bmi()">Calculate BMI</button>
 
 <div id="bmiResult"></div>
 
@@ -172,9 +178,10 @@ if(u!="" && p!=""){
 document.getElementById("loginPage").style.display="none"
 document.getElementById("mainPage").style.display="block"
 
-}
-else{
+}else{
+
 alert("Enter username and password")
+
 }
 
 }
@@ -182,8 +189,10 @@ alert("Enter username and password")
 /* LOGOUT */
 
 function logout(){
+
 document.getElementById("mainPage").style.display="none"
 document.getElementById("loginPage").style.display="flex"
+
 }
 
 /* DARK MODE */
@@ -237,7 +246,7 @@ list.appendChild(option)
 
 }
 
-/* GLOBAL BMI STATUS */
+/* BMI STATUS */
 
 let bmiStatus=""
 
@@ -249,8 +258,10 @@ let h=document.getElementById("height").value/100
 let w=document.getElementById("weight").value
 
 if(h==0 || w==0){
+
 document.getElementById("bmiResult").innerHTML="Enter valid height and weight"
 return
+
 }
 
 let b=w/(h*h)
@@ -287,8 +298,10 @@ return
 let f=document.getElementById("foodName").value.toLowerCase()
 
 if(!foods[f]){
+
 document.getElementById("result").innerHTML="Food not found"
 return
+
 }
 
 let cal=foods[f].cal
@@ -296,14 +309,12 @@ let protein=foods[f].protein
 
 let recommendation=""
 
-/* AI LOGIC */
-
 if(bmiStatus=="underweight"){
 
 if(cal>200){
 recommendation="Recommended for weight gain"
 }else{
-recommendation="You can eat but high calorie foods better"
+recommendation="Eat more calorie foods for weight gain"
 }
 
 }
@@ -317,9 +328,9 @@ recommendation="Safe to eat in moderation"
 else if(bmiStatus=="overweight" || bmiStatus=="obese"){
 
 if(cal>200){
-recommendation="⚠ Not recommended for high weight"
+recommendation="Not recommended for high weight"
 }else{
-recommendation="Better choice for weight control"
+recommendation="Better food choice for weight control"
 }
 
 }
