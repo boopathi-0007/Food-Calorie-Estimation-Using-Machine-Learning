@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>Food Nutrition Analyzer Using ML</title>
+<title>Food Nutrition Analyzer </title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
