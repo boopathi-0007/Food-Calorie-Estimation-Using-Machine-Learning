@@ -4,8 +4,6 @@
 
 <title>Food Nutrition Analyzer Using ML</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -49,17 +47,15 @@ padding:20px;
 min-height:100vh;
 background:url("https://images.unsplash.com/photo-1498837167922-ddd27525d352");
 background-size:cover;
-background-position:center;
 }
 
 /* TITLE */
 
 .title{
-font-size:34px;
+font-size:40px;
 font-weight:bold;
 color:#111;
 margin-bottom:20px;
-white-space:nowrap;
 }
 
 /* BUTTON */
@@ -72,7 +68,6 @@ border:none;
 border-radius:5px;
 cursor:pointer;
 margin:5px;
-font-size:16px;
 }
 
 /* DARK MODE */
@@ -86,7 +81,7 @@ color:white;
 color:white;
 }
 
-/* RESULT */
+/* RESULT BOX */
 
 #result,#bmiResult{
 margin-top:20px;
@@ -105,18 +100,13 @@ padding:10px;
 border-radius:10px;
 }
 
-input{
-padding:10px;
-margin:5px;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
 
 <div id="loginPage">
 
@@ -151,8 +141,6 @@ Food Nutrition Analyzer Using ML
 
 <input id="height" placeholder="Height cm">
 <input id="weight" placeholder="Weight kg">
-
-<br>
 
 <button onclick="bmi()">Calculate BMI</button>
 
@@ -233,7 +221,16 @@ let foods={
 "mutton biryani":{cal:320,protein:18},
 "chapati":{cal:104,protein:3},
 "parotta":{cal:300,protein:6},
-"poori":{cal:250,protein:5}
+"poori":{cal:250,protein:5},
+
+"paneer butter masala":{cal:300,protein:10},
+"palak paneer":{cal:280,protein:11},
+"rajma":{cal:240,protein:9},
+"dal tadka":{cal:180,protein:8},
+
+"omelette":{cal:155,protein:11},
+"boiled egg":{cal:78,protein:6},
+"fish curry":{cal:220,protein:20}
 
 }
 
@@ -249,9 +246,11 @@ list.appendChild(option)
 
 }
 
-/* BMI */
+/* BMI STATUS */
 
 let bmiStatus=""
+
+/* BMI FUNCTION */
 
 function bmi(){
 
@@ -292,11 +291,8 @@ document.getElementById("bmiResult").innerHTML=
 function analyze(){
 
 if(bmiStatus==""){
-
 alert("Please calculate BMI first")
-
 return
-
 }
 
 let f=document.getElementById("foodName").value.toLowerCase()
@@ -313,23 +309,29 @@ let protein=foods[f].protein
 
 let recommendation=""
 
-if(bmiStatus=="overweight" || bmiStatus=="obese"){
+if(bmiStatus=="underweight"){
+
+if(cal>200){
+recommendation="Recommended for weight gain"
+}else{
+recommendation="Eat more calorie foods for weight gain"
+}
+
+}
+
+else if(bmiStatus=="normal"){
+
+recommendation="Safe to eat in moderation"
+
+}
+
+else if(bmiStatus=="overweight" || bmiStatus=="obese"){
 
 if(cal>200){
 recommendation="Not recommended for high weight"
 }else{
-recommendation="Better choice for weight control"
+recommendation="Better food choice for weight control"
 }
-
-}
-else if(bmiStatus=="underweight"){
-
-recommendation="Recommended for weight gain"
-
-}
-else{
-
-recommendation="Safe to eat in moderation"
 
 }
 
@@ -339,6 +341,8 @@ document.getElementById("result").innerHTML=
 "<p>Calories : "+cal+" kcal</p>"+
 "<p>Protein : "+protein+" g</p>"+
 "<p>AI Recommendation : "+recommendation+"</p>"
+
+/* GRAPH */
 
 let ctx=document.getElementById("chart")
 
